@@ -56,6 +56,58 @@ export const constantRoutes = [
   },
 
   {
+    path: '/student',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Student',
+        component: () => import('@/views/student/index'),
+        meta: { title: 'Student List', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/teacher',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Teacher',
+        component: () => import('@/views/teacher/index'),
+        meta: { title: 'Teacher List', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/department',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Department',
+        component: () => import('@/views/department/index'),
+        meta: { title: 'Department List', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/subject',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Subject',
+        component: () => import('@/views/subject/index'),
+        meta: { title: 'Subject List', icon: 'form' }
+      }
+    ]
+  },
+
+  /* {
     path: '/example',
     component: Layout,
     redirect: '/example/table',
@@ -158,7 +210,7 @@ export const constantRoutes = [
         meta: { title: 'External Link', icon: 'link' }
       }
     ]
-  },
+  }, */
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
