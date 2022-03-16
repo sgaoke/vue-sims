@@ -51,7 +51,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '首页', icon: 'dashboard' }
     }]
   },
 
@@ -63,7 +63,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Student',
         component: () => import('@/views/student/index'),
-        meta: { title: 'Student List', icon: 'form' }
+        meta: { title: '学生列表', icon: 'form' }
       }
     ]
   },
@@ -76,7 +76,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Teacher',
         component: () => import('@/views/teacher/index'),
-        meta: { title: 'Teacher List', icon: 'form' }
+        meta: { title: '教师列表', icon: 'el-icon-notebook-2' }
       }
     ]
   },
@@ -89,7 +89,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Department',
         component: () => import('@/views/department/index'),
-        meta: { title: 'Department List', icon: 'form' }
+        meta: { title: '班级列表', icon: 'list' }
       }
     ]
   },
@@ -102,7 +102,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Subject',
         component: () => import('@/views/subject/index'),
-        meta: { title: 'Subject List', icon: 'form' }
+        meta: { title: '课程列表', icon: 'el-icon-collection' }
       }
     ]
   },
