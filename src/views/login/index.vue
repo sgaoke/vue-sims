@@ -12,7 +12,7 @@
       <div class="head">account login</div>
     </div>
     <div class="content">
-      <div class="box login">
+      <div class="box login" :class="loginSty">
         <div class="form-content">
           <div class="avtar">
             <div class="pic"><img src="@/assets/img/1.jpg" alt=""></div>
@@ -60,7 +60,73 @@
             <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleLogin">登录</el-button>
           </el-form>
           <p class="btn-something">
-            Already have an account ? <span class="loginbtn">login</span>
+            Don't have an account ? <span class="signupbtn" @click="onSignup">signup</span>
+          </p>
+        </div>
+      </div>
+      <div class="box signup" :class="signupSty">
+        <div class="form-content">
+          <div class="avtar">
+            <div class="pic"><img src="@/assets/img/2.jpg" alt=""></div>
+          </div>
+          <div class="title-container">
+            <h3 class="title">学生信息管理系统</h3>
+          </div>
+          <el-form ref="signupForm" :model="signupForm" :rules="signupRules" class="login-form" auto-complete="on" label-position="left">
+            <el-form-item prop="username">
+              <span class="svg-container">
+                <svg-icon icon-class="user" />
+              </span>
+              <el-input
+                ref="username"
+                v-model="signupForm.username"
+                placeholder="Username"
+                name="username"
+                type="text"
+                tabindex="1"
+                auto-complete="on"
+              />
+            </el-form-item>
+
+            <el-form-item prop="email">
+              <span class="svg-container">
+                <svg-icon icon-class="email" />
+              </span>
+              <el-input
+                ref="email"
+                v-model="signupForm.email"
+                placeholder="Email"
+                name="email"
+                type="text"
+                tabindex="2"
+                auto-complete="on"
+              />
+            </el-form-item>
+
+            <el-form-item prop="password">
+              <span class="svg-container">
+                <svg-icon icon-class="password" />
+              </span>
+              <el-input
+                :key="passwordType"
+                ref="password"
+                v-model="signupForm.password"
+                :type="passwordType"
+                placeholder="Password"
+                name="password"
+                tabindex="3"
+                auto-complete="on"
+                @keyup.enter.native="handleSignup"
+              />
+              <span class="show-pwd" @click="showPwd">
+                <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+              </span>
+            </el-form-item>
+
+            <el-button :loading="loading" type="primary" style="width:100%;" @click.native.prevent="handleSignup">注册</el-button>
+          </el-form>
+          <p class="btn-something">
+            Already have an account ? <span class="loginbtn" @click="onLogin">login</span>
           </p>
         </div>
       </div>
@@ -69,7 +135,7 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
+import { validUsername, validEmail } from '@/utils/validate'
 
 export default {
   name: 'Login',
@@ -77,6 +143,13 @@ export default {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
         callback(new Error('Please enter the correct user name'))
+      } else {
+        callback()
+      }
+    }
+    const validateEmail = (rule, value, callback) => {
+      if (!validEmail(value)) {
+        callback(new Error('Please enter the correct email'))
       } else {
         callback()
       }
@@ -93,13 +166,25 @@ export default {
         username: '',
         password: ''
       },
+      signupForm: {
+        username: '',
+        email: '',
+        password: ''
+      },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
+      signupRules: {
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        email: [{ required: true, trigger: 'blur', validator: validateEmail }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+      },
       loading: false,
       passwordType: 'password',
-      redirect: undefined
+      redirect: undefined,
+      loginSty: '',
+      signupSty: ''
     }
   },
   watch: {
@@ -121,6 +206,22 @@ export default {
         this.$refs.password.focus()
       })
     },
+    handleSignup() {
+      this.$refs.signupForm.validate(valid => {
+        if (valid) {
+          this.loading = true
+          this.$store.dispatch('user/signup', this.signupForm).then(() => {
+            this.$router.push({ path: this.redirect || '/' })
+            this.loading = false
+          }).catch(() => {
+            this.loading = false
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
@@ -136,7 +237,16 @@ export default {
           return false
         }
       })
+    },
+    onSignup() {
+      this.loginSty = 'transform180'
+      this.signupSty = 'transform0'
+    },
+    onLogin() {
+      this.loginSty = 'transform0'
+      this.signupSty = 'transform-180'
     }
+
   }
 }
 </script>
@@ -180,6 +290,7 @@ $cursor: #fff;
   }
 
   .el-form-item {
+    width: 100%;
     // border: 1px solid rgba(255, 255, 255, 0.1);
     border: 0 none;
     // background: rgba(0, 0, 0, 0.1);
@@ -241,8 +352,8 @@ $light_gray:#eee;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 20rem;
-    height: 28rem;
+    width: 22rem;
+    height: 32rem;
     perspective: 1500px;
     -webkit-perspective: 1500px;
     -moz-perspective: 1500px;
@@ -250,8 +361,8 @@ $light_gray:#eee;
       position: absolute;
       top: 0;
       left: 0;
-      width: 20rem;
-      height: 28rem;
+      width: 22rem;
+      height: 30rem;
       border-radius: 10px;
       cursor: pointer;
       backface-visibility: hidden;
@@ -312,6 +423,7 @@ $light_gray:#eee;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    width: 80%;
   }
 
   /* .tips {
@@ -356,6 +468,20 @@ $light_gray:#eee;
     color: $dark_gray;
     cursor: pointer;
     user-select: none;
+  }
+
+  .signup {
+    /* background-color: blue; */
+    transform: rotateY(-108deg);
+  }
+  .transform0 {
+    transform: rotateY(0deg);
+  }
+  .transform180 {
+    transform: rotateY(180deg);
+  }
+  .transform-180 {
+    transform: rotateY(-180deg);
   }
 }
 </style>
