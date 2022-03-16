@@ -1,6 +1,6 @@
 # vue-sims
 
-> 这是一个 vue+node+mongodb 搭建的 学生信息管理 系统。
+> 这是一个 vue+node+mongodb 搭建的学生信息管理系统。
 
 ## Build Setup
 

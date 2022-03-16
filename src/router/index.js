@@ -54,7 +54,55 @@ export const constantRoutes = [
       meta: { title: '首页', icon: 'dashboard' }
     }]
   },
-
+  {
+    path: '/personal',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Personal',
+        component: () => import('@/views/personal/index'),
+        meta: { title: '个人信息', icon: 'el-icon-help' }
+      }
+    ]
+  },
+  {
+    path: '/grade',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Grade',
+        component: () => import('@/views/grade/index'),
+        meta: { title: '成绩信息', icon: 'el-icon-notebook-1' }
+      }
+    ]
+  },
+  {
+    path: '/timetable',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Timetable',
+        component: () => import('@/views/timetable/index'),
+        meta: { title: '课表信息', icon: 'el-icon-s-management' }
+      }
+    ]
+  },
+  {
+    path: '/rewards',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Rewards',
+        component: () => import('@/views/rewards/index'),
+        meta: { title: '奖惩信息', icon: 'el-icon-s-data' }
+      }
+    ]
+  },
+  // 学生列表
   {
     path: '/student',
     component: Layout,
@@ -63,11 +111,11 @@ export const constantRoutes = [
         path: 'index',
         name: 'Student',
         component: () => import('@/views/student/index'),
-        meta: { title: '学生列表', icon: 'form' }
+        meta: { title: '学生列表', icon: 'el-icon-document' }
       }
     ]
   },
-
+  // 教师列表
   {
     path: '/teacher',
     component: Layout,
@@ -89,7 +137,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Department',
         component: () => import('@/views/department/index'),
-        meta: { title: '班级列表', icon: 'list' }
+        meta: { title: '班级列表', icon: 'el-icon-tickets' }
       }
     ]
   },
@@ -217,7 +265,7 @@ export const constantRoutes = [
 ]
 
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
+  mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })
