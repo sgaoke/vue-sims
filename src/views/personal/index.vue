@@ -1,6 +1,15 @@
 <template>
   <div class="app-container">
     <div class="p-wrapper">
+      <div class="edit">
+        <el-button class="e-btn" type="text">
+          <i class="el-icon-edit-outline" />
+          编辑
+        </el-button>
+      </div>
+      <div class="avatar">
+        <img src="@/assets/img/avatar.jpg" alt="avatar" width="150" height="150">
+      </div>
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" class="ruleForm">
         <el-row :gutter="10">
           <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
@@ -20,6 +29,11 @@
             </div>
           </el-col>
           <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+            <div class="grid-content">&nbsp;</div>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
             <div class="grid-content">
               <el-form-item label="性别" prop="gender">
                 <!-- <el-input v-model="ruleForm.gender" /> -->
@@ -27,8 +41,6 @@
               </el-form-item>
             </div>
           </el-col>
-        </el-row>
-        <el-row :gutter="10">
           <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
             <div class="grid-content">
               <el-form-item label="证件类型" prop="cType">
@@ -37,6 +49,11 @@
               </el-form-item>
             </div>
           </el-col>
+          <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+            <div class="grid-content">&nbsp;</div>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
           <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
             <div class="grid-content">
               <el-form-item label="证件号码" prop="cNumber">
@@ -52,6 +69,9 @@
                 <span>{{ ruleForm.birthDate }}</span>
               </el-form-item>
             </div>
+          </el-col>
+          <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+            <div class="grid-content">&nbsp;</div>
           </el-col>
         </el-row>
         <el-row :gutter="10">
@@ -158,8 +178,20 @@ export default {
     min-height: 36px;
   }
   .p-wrapper {
+    position: relative;
     background: #fff;
     padding: 20px 10px 0 10px;
     box-shadow: 0 0 3px rgb(0 0 0 / 20%);
+    .edit {
+      position: absolute;
+      right: 20px;
+      top: 0;
+      z-index: 100;
+    }
+    .avatar{
+      position: absolute;
+      right: 120px;
+      top: 40px;
+    }
   }
 </style>
