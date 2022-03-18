@@ -9,7 +9,7 @@
     </svg>
     <div class="user">
       <i class="fa fa-user" />
-      <div class="head">account login</div>
+      <div class="head">{{ accountLogin }}</div>
     </div>
     <div class="content">
       <div class="box login" :class="loginSty">
@@ -162,6 +162,7 @@ export default {
       }
     }
     return {
+      accountLogin: '用户登录',
       loginForm: {
         username: '',
         password: ''
@@ -241,10 +242,12 @@ export default {
     onSignup() {
       this.loginSty = 'transform180'
       this.signupSty = 'transform0'
+      this.accountLogin = '用户注册'
     },
     onLogin() {
       this.loginSty = 'transform0'
       this.signupSty = 'transform-180'
+      this.accountLogin = '用户登录'
     }
 
   }

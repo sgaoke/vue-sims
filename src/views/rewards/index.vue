@@ -1,29 +1,5 @@
 <template>
   <div class="app-container">
-    <!-- <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="Title" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-select v-model="listQuery.importance" placeholder="Imp" clearable style="width: 90px" class="filter-item">
-        <el-option v-for="item in importanceOptions" :key="item" :label="item" :value="item" />
-      </el-select>
-      <el-select v-model="listQuery.type" placeholder="Type" clearable class="filter-item" style="width: 130px">
-        <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name+'('+item.key+')'" :value="item.key" />
-      </el-select>
-      <el-select v-model="listQuery.sort" style="width: 140px" class="filter-item" @change="handleFilter">
-        <el-option v-for="item in sortOptions" :key="item.key" :label="item.label" :value="item.key" />
-      </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-        查询
-      </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        Add
-      </el-button>
-      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-        Export
-      </el-button>
-      <el-checkbox v-model="showReviewer" class="filter-item" style="margin-left:15px;" @change="tableKey=tableKey+1">
-        reviewer
-      </el-checkbox>
-    </div> -->
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="奖励信息" name="award">
         <el-table
@@ -43,41 +19,32 @@
           </el-table-column>
           <el-table-column label="奖励编号" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+              <span>{{ row.awardNumber }}</span>
             </template>
           </el-table-column>
           <el-table-column label="奖励项目" min-width="150px">
             <template slot-scope="{row}">
-              <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
-              <el-tag>{{ row.type | typeFilter }}</el-tag>
+              <span>{{ row.awardProject }}</span>
             </template>
           </el-table-column>
           <el-table-column label="奖励级别" width="120px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.author }}</span>
+              <span>{{ row.awardLevel }}</span>
             </template>
           </el-table-column>
-          <!-- <el-table-column v-if="showReviewer" label="Reviewer" width="110px" align="center">
-        <template slot-scope="{row}">
-          <span style="color:red;">{{ row.reviewer }}</span>
-        </template>
-      </el-table-column> -->
           <el-table-column label="奖励方式" width="110px">
             <template slot-scope="{row}">
-              <svg-icon v-for="n in + row.importance" :key="n" icon-class="star" class="meta-item__icon" />
+              <span>{{ row.awardWay }}</span>
             </template>
           </el-table-column>
           <el-table-column label="奖励类别" align="center" width="120">
             <template slot-scope="{row}">
-              <span v-if="row.pageviews" class="link-type" @click="handleFetchPv(row.pageviews)">{{ row.pageviews }}</span>
-              <span v-else>0</span>
+              <span>{{ row.awardCategory }}</span>
             </template>
           </el-table-column>
           <el-table-column label="奖励金额" class-name="status-col" width="120">
             <template slot-scope="{row}">
-              <el-tag :type="row.status | statusFilter">
-                {{ row.status }}
-              </el-tag>
+              <span>{{ row.awardBonus }}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
@@ -85,75 +52,56 @@
               <el-button type="primary" size="mini" @click="handleUpdate(row)">
                 查看
               </el-button>
-              <!-- <el-button v-if="row.status!='published'" size="mini" type="success" @click="handleModifyStatus(row,'published')">
-            Publish
-          </el-button>
-          <el-button v-if="row.status!='draft'" size="mini" @click="handleModifyStatus(row,'draft')">
-            Draft
-          </el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
-            Delete
-          </el-button> -->
             </template>
           </el-table-column>
         </el-table>
-
         <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-
       </el-tab-pane>
+      <!-- 处分信息 -->
       <el-tab-pane label="处分信息" name="punish">
         <el-table
-          :key="tableKey"
-          v-loading="listLoading"
-          :data="list"
+          :key="tableKey1"
+          v-loading="listLoading1"
+          :data="list1"
           border
           fit
           highlight-current-row
           style="width: 100%;"
-          @sort-change="sortChange"
+          @sort-change="sortChange1"
         >
-          <el-table-column label="序号" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+          <el-table-column label="序号" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass1('id')">
             <template slot-scope="{row}">
               <span>{{ row.id }}</span>
             </template>
           </el-table-column>
           <el-table-column label="处分编号" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+              <span>{{ row.punishNumber }}</span>
             </template>
           </el-table-column>
           <el-table-column label="处分名称" min-width="150px">
             <template slot-scope="{row}">
-              <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
-              <el-tag>{{ row.type | typeFilter }}</el-tag>
+              <span>{{ row.punishName }}</span>
             </template>
           </el-table-column>
           <el-table-column label="处分日期" width="110px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.author }}</span>
+              <span>{{ row.punishDate }}</span>
             </template>
           </el-table-column>
-          <!-- <el-table-column v-if="showReviewer" label="Reviewer" width="110px" align="center">
-        <template slot-scope="{row}">
-          <span style="color:red;">{{ row.reviewer }}</span>
-        </template>
-      </el-table-column> -->
           <el-table-column label="违纪类别" width="120px">
             <template slot-scope="{row}">
-              <svg-icon v-for="n in + row.importance" :key="n" icon-class="star" class="meta-item__icon" />
+              <span>{{ row.disciplineCategory }}</span>
             </template>
           </el-table-column>
           <el-table-column label="违纪日期" align="center" width="120">
             <template slot-scope="{row}">
-              <span v-if="row.pageviews" class="link-type" @click="handleFetchPv(row.pageviews)">{{ row.pageviews }}</span>
-              <span v-else>0</span>
+              <span>{{ row.disciplineDate }}</span>
             </template>
           </el-table-column>
           <el-table-column label="处分接触原因" class-name="status-col" width="160">
             <template slot-scope="{row}">
-              <el-tag :type="row.status | statusFilter">
-                {{ row.status }}
-              </el-tag>
+              <span>{{ row.disciplineReason }}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
@@ -161,20 +109,11 @@
               <el-button type="primary" size="mini" @click="handleUpdate(row)">
                 查看
               </el-button>
-              <!-- <el-button v-if="row.status!='published'" size="mini" type="success" @click="handleModifyStatus(row,'published')">
-            Publish
-          </el-button>
-          <el-button v-if="row.status!='draft'" size="mini" @click="handleModifyStatus(row,'draft')">
-            Draft
-          </el-button>
-          <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
-            Delete
-          </el-button> -->
             </template>
           </el-table-column>
         </el-table>
 
-        <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+        <pagination v-show="total1>0" :total="total1" :page.sync="listQuery1.page" :limit.sync="listQuery1.limit" @pagination="getList1" />
 
       </el-tab-pane>
     </el-tabs>
@@ -227,7 +166,7 @@
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
+import { fetchAwardList, fetchPunishList, createArticle, updateArticle } from '@/api/student'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -265,18 +204,23 @@ export default {
   data() {
     return {
       tableKey: 0,
+      tableKey1: 0,
       list: null,
+      list1: null,
       total: 0,
+      total1: 0,
       listLoading: true,
+      listLoading1: true,
       listQuery: {
         page: 1,
         limit: 10,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
         sort: '+id'
       },
-      importanceOptions: [1, 2, 3],
+      listQuery1: {
+        page: 1,
+        limit: 10,
+        sort: '+id'
+      },
       calendarTypeOptions,
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
@@ -309,11 +253,12 @@ export default {
   },
   created() {
     this.getList()
+    this.getList1()
   },
   methods: {
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      fetchAwardList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 
@@ -323,9 +268,25 @@ export default {
         }, 1.5 * 1000)
       })
     },
+    getList1() {
+      this.listLoading1 = true
+      fetchPunishList(this.listQuery1).then(response => {
+        this.list1 = response.data.items
+        this.total1 = response.data.total
+        console.log(this.list1)
+        // Just to simulate the time of the request
+        setTimeout(() => {
+          this.listLoading1 = false
+        }, 1.5 * 1000)
+      })
+    },
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
+    },
+    handleFilter1() {
+      this.listQuery.page = 1
+      this.getList1()
     },
     handleModifyStatus(row, status) {
       this.$message({
@@ -340,6 +301,12 @@ export default {
         this.sortByID(order)
       }
     },
+    sortChange1(data) {
+      const { prop, order } = data
+      if (prop === 'id') {
+        this.sortByID1(order)
+      }
+    },
     sortByID(order) {
       if (order === 'ascending') {
         this.listQuery.sort = '+id'
@@ -347,6 +314,14 @@ export default {
         this.listQuery.sort = '-id'
       }
       this.handleFilter()
+    },
+    sortByID1(order) {
+      if (order === 'ascending') {
+        this.listQuery.sort = '+id'
+      } else {
+        this.listQuery.sort = '-id'
+      }
+      this.handleFilter1()
     },
     resetTemp() {
       this.temp = {
@@ -422,12 +397,6 @@ export default {
       })
       this.list.splice(index, 1)
     },
-    handleFetchPv(pv) {
-      fetchPv(pv).then(response => {
-        this.pvData = response.data.pvData
-        this.dialogPvVisible = true
-      })
-    },
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
@@ -454,6 +423,13 @@ export default {
     getSortClass: function(key) {
       const sort = this.listQuery.sort
       return sort === `+${key}` ? 'ascending' : 'descending'
+    },
+    getSortClass1: function(key) {
+      const sort = this.listQuery.sort
+      return sort === `+${key}` ? 'ascending' : 'descending'
+    },
+    handleClick() {
+      console.log('切换Tab')
     }
   }
 }

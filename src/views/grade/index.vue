@@ -1,16 +1,32 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="课程名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-      <el-date-picker
-        v-model="listQuery.examTime"
-        class="filter-item"
-        type="daterange"
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
-      />
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
+      <el-form ref="form" :model="listQuery" label-width="80px">
+        <el-row :gutter="10">
+          <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+            <el-form-item label="课程名称">
+              <el-input v-model="listQuery.title" placeholder="请输入课程名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+            </el-form-item>
+          </el-col>
+          <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+            <el-form-item label="考试时间">
+              <el-date-picker
+                v-model="listQuery.examTime"
+                class="filter-item"
+                type="daterange"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+            <el-form-item style="text-align: right;">
+              <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查询</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
     </div>
 
     <el-table
@@ -33,7 +49,7 @@
           <span>{{ row.course }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="授课教师" class-name="status-col" width="120">
+      <el-table-column label="授课教师" width="120">
         <template slot-scope="{row}">
           <span>{{ row.teacher }}</span>
         </template>
@@ -48,7 +64,7 @@
           <span>{{ row.examScore }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="成绩排名" width="120px">
+      <el-table-column label="成绩排名" width="120px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.scoreRank }}</span>
         </template>
@@ -199,6 +215,7 @@ export default {
   },
   methods: {
     getList() {
+      console.log(this.listQuery)
       this.listLoading = true
       fetchGradeList(this.listQuery).then(response => {
         this.list = response.data.items
@@ -339,3 +356,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.el-form-item {
+  margin-bottom: 0;
+}
+</style>
