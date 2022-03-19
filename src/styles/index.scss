@@ -194,3 +194,27 @@ aside {
 .multiselect--active {
   z-index: 1000 !important;
 }
+
+// 滚动条样式
+.scrollbar-sty::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 5px; /*高宽分别对应横竖滚动条的尺寸*/
+  height: 1px;
+}
+.scrollbar-sty::-webkit-scrollbar-corner {
+  background: rgba(222, 236, 253, 1);
+}
+.scrollbar-sty::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.1);
+  background: #dfdfdf;
+  border-radius: 1px;
+}
+.scrollbar-sty::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.1);
+  background: rgba(222, 236, 253, 0.4);
+  border-radius: 1px;
+}

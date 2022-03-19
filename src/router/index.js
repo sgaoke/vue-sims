@@ -102,7 +102,7 @@ export const constantRoutes = [
       }
     ]
   },
-  // 学生列表
+  // 教师角色-学生信息
   {
     path: '/student',
     component: Layout,
@@ -111,37 +111,11 @@ export const constantRoutes = [
         path: 'index',
         name: 'Student',
         component: () => import('@/views/student/index'),
-        meta: { title: '学生列表', icon: 'el-icon-document' }
+        meta: { title: '学生信息', icon: 'el-icon-odometer' }
       }
     ]
   },
-  // 教师列表
-  {
-    path: '/teacher',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Teacher',
-        component: () => import('@/views/teacher/index'),
-        meta: { title: '教师列表', icon: 'el-icon-notebook-2' }
-      }
-    ]
-  },
-
-  {
-    path: '/department',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Department',
-        component: () => import('@/views/department/index'),
-        meta: { title: '班级列表', icon: 'el-icon-tickets' }
-      }
-    ]
-  },
-
+  // 教师角色-课程信息
   {
     path: '/subject',
     component: Layout,
@@ -150,11 +124,62 @@ export const constantRoutes = [
         path: 'index',
         name: 'Subject',
         component: () => import('@/views/subject/index'),
-        meta: { title: '课程列表', icon: 'el-icon-collection' }
+        meta: { title: '课程信息', icon: 'el-icon-s-management' }
       }
     ]
   },
-
+  // 教师角色-成绩信息
+  {
+    path: '/t-grade',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'TGrade',
+        component: () => import('@/views/t-grade/index'),
+        meta: { title: '成绩信息', icon: 'el-icon-collection' }
+      }
+    ]
+  },
+  // 教师角色-班级信息
+  {
+    path: '/department',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Department',
+        component: () => import('@/views/department/index'),
+        meta: { title: '班级信息', icon: 'el-icon-takeaway-box' }
+      }
+    ]
+  },
+  // 教师角色-奖惩信息
+  {
+    path: '/t-rewards',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'TRewards',
+        component: () => import('@/views/t-rewards/index'),
+        meta: { title: '奖惩信息', icon: 'el-icon-s-data' }
+      }
+    ]
+  },
+  // 教师角色-宿舍信息
+  {
+    path: '/teacher',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Teacher',
+        component: () => import('@/views/teacher/index'),
+        meta: { title: '宿舍信息', icon: 'el-icon-notebook-2' }
+      }
+    ]
+  },
   /* {
     path: '/example',
     component: Layout,
