@@ -1,5 +1,31 @@
 <template>
   <div class="app-container">
+    <div class="filter-container">
+      <el-form ref="form" :model="listQuery" label-width="80px">
+        <el-row :gutter="10">
+          <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+            <el-form-item label="学生学号">
+              <el-input v-model="listQuery.title" placeholder="请输入学生学号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+            </el-form-item>
+          </el-col>
+          <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+            <el-form-item label="学生姓名">
+              <el-input v-model="listQuery.title" placeholder="请输入学生姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+            </el-form-item>
+          </el-col>
+          <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+            <el-form-item style="text-align: right;">
+              <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+                查询
+              </el-button>
+              <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+                新增
+              </el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </div>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="奖励信息" name="award">
         <el-table
@@ -12,9 +38,38 @@
           style="width: 100%;"
           @sort-change="sortChange"
         >
-          <el-table-column label="序号" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+          <el-table-column label="序号" prop="id" fixed sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
             <template slot-scope="{row}">
               <span>{{ row.id }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" align="center" width="230" fixed class-name="small-padding fixed-width">
+            <template slot-scope="{row}">
+              <el-button type="primary" size="mini" @click="handleUpdate(row)">
+                查看
+              </el-button>
+              <el-button type="primary" size="mini" @click="handleUpdate(row)">
+                编辑
+              </el-button>
+              <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
+          <el-table-column label="学号" width="150px" align="center">
+            <template slot-scope="{row}">
+              <span>{{ row.awardNumber }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="姓名" min-width="150px">
+            <template slot-scope="{row}">
+              <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
+              <el-tag>{{ row.type | typeFilter }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="性别" width="110px" align="center">
+            <template slot-scope="{row}">
+              <span>{{ row.author }}</span>
             </template>
           </el-table-column>
           <el-table-column label="奖励编号" width="150px" align="center">
@@ -47,11 +102,9 @@
               <span>{{ row.awardBonus }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+          <el-table-column label="获奖时间" class-name="status-col" width="120">
             <template slot-scope="{row}">
-              <el-button type="primary" size="mini" @click="handleUpdate(row)">
-                查看
-              </el-button>
+              <span>{{ row.awardBonus }}</span>
             </template>
           </el-table-column>
         </el-table>
@@ -69,9 +122,38 @@
           style="width: 100%;"
           @sort-change="sortChange1"
         >
-          <el-table-column label="序号" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass1('id')">
+          <el-table-column label="序号" prop="id" fixed sortable="custom" align="center" width="80" :class-name="getSortClass1('id')">
             <template slot-scope="{row}">
               <span>{{ row.id }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" align="center" width="230" fixed class-name="small-padding fixed-width">
+            <template slot-scope="{row}">
+              <el-button type="primary" size="mini" @click="handleUpdate(row)">
+                查看
+              </el-button>
+              <el-button type="primary" size="mini" @click="handleUpdate(row)">
+                编辑
+              </el-button>
+              <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
+          <el-table-column label="学号" width="150px" align="center">
+            <template slot-scope="{row}">
+              <span>{{ row.awardNumber }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="姓名" min-width="150px">
+            <template slot-scope="{row}">
+              <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
+              <el-tag>{{ row.type | typeFilter }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column label="性别" width="110px" align="center">
+            <template slot-scope="{row}">
+              <span>{{ row.author }}</span>
             </template>
           </el-table-column>
           <el-table-column label="处分编号" width="150px" align="center">
@@ -102,13 +184,6 @@
           <el-table-column label="处分接触原因" class-name="status-col" width="160">
             <template slot-scope="{row}">
               <span>{{ row.disciplineReason }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
-            <template slot-scope="{row}">
-              <el-button type="primary" size="mini" @click="handleUpdate(row)">
-                查看
-              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -434,3 +509,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.el-form-item {
+  margin-bottom: 0;
+}
+</style>

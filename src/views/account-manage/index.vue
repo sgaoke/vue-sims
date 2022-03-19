@@ -3,17 +3,17 @@
     <div class="filter-container">
       <el-form ref="form" :model="listQuery" label-width="80px">
         <el-row :gutter="10">
-          <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6">
+          <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
             <el-form-item label="学生学号">
               <el-input v-model="listQuery.title" placeholder="请输入学生学号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
             </el-form-item>
           </el-col>
-          <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6">
+          <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
             <el-form-item label="学生姓名">
               <el-input v-model="listQuery.title" placeholder="请输入学生姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
             </el-form-item>
           </el-col>
-          <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
+          <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
             <el-form-item style="text-align: right;">
               <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
                 查询
@@ -21,19 +21,13 @@
               <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
                 新增
               </el-button>
-              <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-upload" @click="handleDownload">
-                上传
-              </el-button>
-              <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-                下载
-              </el-button>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
     </div>
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="单科成绩信息" name="subjectScore">
+      <el-tab-pane label="学生账号" name="award">
         <el-table
           :key="tableKey"
           v-loading="listLoading"
@@ -62,78 +56,48 @@
               </el-button>
             </template>
           </el-table-column>
-          <el-table-column label="班级名称" min-width="150px" align="center">
+          <el-table-column label="学号" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.course }}</span>
+              <span>{{ row.awardNumber }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="学生学号" min-width="150px" align="center">
+          <el-table-column label="姓名" min-width="150px">
             <template slot-scope="{row}">
-              <span>{{ row.course }}</span>
+              <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
+              <el-tag>{{ row.type | typeFilter }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="学生姓名" min-width="150px" align="center">
+          <el-table-column label="性别" width="110px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.course }}</span>
+              <span>{{ row.author }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="课程名称" min-width="150px" align="center">
+          <el-table-column label="密码" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.course }}</span>
+              <span>{{ row.awardNumber }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="课程分数" min-width="150px" align="center">
+          <el-table-column label="邮箱" min-width="150px">
             <template slot-scope="{row}">
-              <span>{{ row.course }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="授课教师" width="120">
-            <template slot-scope="{row}">
-              <span>{{ row.teacher }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="考试时间" min-width="150px">
-            <template slot-scope="{row}">
-              <span>{{ row.examTime }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="考试成绩" width="120px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.examScore }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="单科成绩排名" width="120px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="成绩修改原因" width="120px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="备注" align="center" width="160px">
-            <template slot-scope="{row}">
-              <span>{{ row.remark }}</span>
+              <span>{{ row.awardProject }}</span>
             </template>
           </el-table-column>
         </el-table>
-
         <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-
       </el-tab-pane>
-      <el-tab-pane label="总成绩信息" name="totalScore">
+      <!-- 教师账号 -->
+      <el-tab-pane label="教师账号" name="punish">
         <el-table
-          :key="tableKey"
-          v-loading="listLoading"
-          :data="list"
+          :key="tableKey1"
+          v-loading="listLoading1"
+          :data="list1"
           border
           fit
           highlight-current-row
           style="width: 100%;"
-          @sort-change="sortChange"
+          @sort-change="sortChange1"
         >
-          <el-table-column label="序号" prop="id" sortable="custom" fixed align="center" width="80" :class-name="getSortClass('id')">
+          <el-table-column label="序号" prop="id" fixed sortable="custom" align="center" width="80" :class-name="getSortClass1('id')">
             <template slot-scope="{row}">
               <span>{{ row.id }}</span>
             </template>
@@ -151,132 +115,39 @@
               </el-button>
             </template>
           </el-table-column>
-          <el-table-column label="班级名称" min-width="150px" align="center">
+          <el-table-column label="工号" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.course }}</span>
+              <span>{{ row.awardNumber }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="学生学号" min-width="150px" align="center">
+          <el-table-column label="姓名" min-width="150px">
             <template slot-scope="{row}">
-              <span>{{ row.course }}</span>
+              <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
+              <el-tag>{{ row.type | typeFilter }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="学生姓名" min-width="150px" align="center">
+          <el-table-column label="性别" width="110px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.course }}</span>
+              <span>{{ row.author }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="语文" min-width="150px" align="center">
+          <el-table-column label="密码" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.course }}</span>
+              <span>{{ row.punishNumber }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="数学" min-width="150px" align="center">
+          <el-table-column label="邮箱" min-width="150px">
             <template slot-scope="{row}">
-              <span>{{ row.course }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="英语" width="120">
-            <template slot-scope="{row}">
-              <span>{{ row.teacher }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="政治" width="150px">
-            <template slot-scope="{row}">
-              <span>{{ row.examTime }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="生物（操作）" width="120px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.examScore }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="生物" width="120px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="物理（操作）" align="center" width="160px">
-            <template slot-scope="{row}">
-              <span>{{ row.remark }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="物理" width="120px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="化学（操作）" width="120px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="化学" width="120px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="地理" width="120px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="地理（户外考察）" width="150px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="体育" width="120px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="微机实验课" width="120px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="微机" width="120px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="音乐" width="120px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="美术" width="120px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="总成绩" width="120px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="总成绩排名" width="120px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="成绩修改原因" width="120px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="备注" width="120px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
+              <span>{{ row.punishName }}</span>
             </template>
           </el-table-column>
         </el-table>
 
-        <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+        <pagination v-show="total1>0" :total="total1" :page.sync="listQuery1.page" :limit.sync="listQuery1.limit" @pagination="getList1" />
 
       </el-tab-pane>
     </el-tabs>
+
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
         <el-form-item label="Type" prop="type">
@@ -325,7 +196,7 @@
 </template>
 
 <script>
-import { fetchGradeList, createArticle, updateArticle } from '@/api/student'
+import { fetchAwardList, fetchPunishList, createArticle, updateArticle } from '@/api/student'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -362,18 +233,24 @@ export default {
   },
   data() {
     return {
-      activeName: 'subjectScore',
       tableKey: 0,
+      tableKey1: 0,
       list: null,
+      list1: null,
       total: 0,
+      total1: 0,
       listLoading: true,
+      listLoading1: true,
       listQuery: {
         page: 1,
         limit: 10,
-        title: undefined,
-        examTime: undefined
+        sort: '+id'
       },
-      importanceOptions: [1, 2, 3],
+      listQuery1: {
+        page: 1,
+        limit: 10,
+        sort: '+id'
+      },
       calendarTypeOptions,
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
@@ -400,17 +277,18 @@ export default {
         timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
-      downloadLoading: false
+      downloadLoading: false,
+      activeName: 'award'
     }
   },
   created() {
     this.getList()
+    this.getList1()
   },
   methods: {
     getList() {
-      console.log(this.listQuery)
       this.listLoading = true
-      fetchGradeList(this.listQuery).then(response => {
+      fetchAwardList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 
@@ -420,9 +298,25 @@ export default {
         }, 1.5 * 1000)
       })
     },
+    getList1() {
+      this.listLoading1 = true
+      fetchPunishList(this.listQuery1).then(response => {
+        this.list1 = response.data.items
+        this.total1 = response.data.total
+        console.log(this.list1)
+        // Just to simulate the time of the request
+        setTimeout(() => {
+          this.listLoading1 = false
+        }, 1.5 * 1000)
+      })
+    },
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
+    },
+    handleFilter1() {
+      this.listQuery.page = 1
+      this.getList1()
     },
     handleModifyStatus(row, status) {
       this.$message({
@@ -437,6 +331,12 @@ export default {
         this.sortByID(order)
       }
     },
+    sortChange1(data) {
+      const { prop, order } = data
+      if (prop === 'id') {
+        this.sortByID1(order)
+      }
+    },
     sortByID(order) {
       if (order === 'ascending') {
         this.listQuery.sort = '+id'
@@ -444,6 +344,14 @@ export default {
         this.listQuery.sort = '-id'
       }
       this.handleFilter()
+    },
+    sortByID1(order) {
+      if (order === 'ascending') {
+        this.listQuery.sort = '+id'
+      } else {
+        this.listQuery.sort = '-id'
+      }
+      this.handleFilter1()
     },
     resetTemp() {
       this.temp = {
@@ -546,8 +454,12 @@ export default {
       const sort = this.listQuery.sort
       return sort === `+${key}` ? 'ascending' : 'descending'
     },
+    getSortClass1: function(key) {
+      const sort = this.listQuery.sort
+      return sort === `+${key}` ? 'ascending' : 'descending'
+    },
     handleClick() {
-      console.log('activename')
+      console.log('切换Tab')
     }
   }
 }

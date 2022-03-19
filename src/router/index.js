@@ -141,7 +141,7 @@ export const constantRoutes = [
       }
     ]
   },
-  // 教师角色-班级信息
+  // 教师角色-班级出勤信息
   {
     path: '/department',
     component: Layout,
@@ -150,7 +150,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Department',
         component: () => import('@/views/department/index'),
-        meta: { title: '班级信息', icon: 'el-icon-takeaway-box' }
+        meta: { title: '班级出勤信息', icon: 'el-icon-takeaway-box' }
       }
     ]
   },
@@ -180,6 +180,32 @@ export const constantRoutes = [
       }
     ]
   },
+  // 管理员-账号管理
+  {
+    path: '/account-manage',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'AccountManage',
+        component: () => import('@/views/account-manage/index'),
+        meta: { title: '账号管理', icon: 'el-icon-s-data' }
+      }
+    ]
+  },
+  // 管理员-课程管理
+  // {
+  //   path: '/course-manage',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'CourseManage',
+  //       component: () => import('@/views/course-manage/index'),
+  //       meta: { title: '课程管理', icon: 'el-icon-s-data' }
+  //     }
+  //   ]
+  // },
   /* {
     path: '/example',
     component: Layout,
