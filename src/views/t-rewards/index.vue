@@ -56,20 +56,19 @@
               </el-button>
             </template>
           </el-table-column>
-          <el-table-column label="学号" width="150px" align="center">
+          <el-table-column label="学号" width="140px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.awardNumber }}</span>
+              <span>{{ row.studentNumber }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="姓名" min-width="150px">
+          <el-table-column label="姓名" width="120px">
             <template slot-scope="{row}">
-              <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
-              <el-tag>{{ row.type | typeFilter }}</el-tag>
+              <span>{{ row.studentName }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="性别" width="110px" align="center">
+          <el-table-column label="性别" width="120px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.author }}</span>
+              <span>{{ row.gender }}</span>
             </template>
           </el-table-column>
           <el-table-column label="奖励编号" width="150px" align="center">
@@ -77,7 +76,7 @@
               <span>{{ row.awardNumber }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="奖励项目" min-width="150px">
+          <el-table-column label="奖励项目" width="240px">
             <template slot-scope="{row}">
               <span>{{ row.awardProject }}</span>
             </template>
@@ -87,7 +86,7 @@
               <span>{{ row.awardLevel }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="奖励方式" width="110px">
+          <el-table-column label="奖励方式" width="120px">
             <template slot-scope="{row}">
               <span>{{ row.awardWay }}</span>
             </template>
@@ -97,14 +96,14 @@
               <span>{{ row.awardCategory }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="奖励金额" class-name="status-col" width="120">
+          <el-table-column label="奖励金额" width="140">
             <template slot-scope="{row}">
               <span>{{ row.awardBonus }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="获奖时间" class-name="status-col" width="120">
+          <el-table-column label="获奖时间" width="140">
             <template slot-scope="{row}">
-              <span>{{ row.awardBonus }}</span>
+              <span>{{ row.awardTime }}</span>
             </template>
           </el-table-column>
         </el-table>
@@ -140,20 +139,19 @@
               </el-button>
             </template>
           </el-table-column>
-          <el-table-column label="学号" width="150px" align="center">
+          <el-table-column label="学号" width="140px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.awardNumber }}</span>
+              <span>{{ row.studentNumber }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="姓名" min-width="150px">
+          <el-table-column label="姓名" width="120px">
             <template slot-scope="{row}">
-              <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
-              <el-tag>{{ row.type | typeFilter }}</el-tag>
+              <span>{{ row.studentName }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="性别" width="110px" align="center">
+          <el-table-column label="性别" width="120px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.author }}</span>
+              <span>{{ row.gender }}</span>
             </template>
           </el-table-column>
           <el-table-column label="处分编号" width="150px" align="center">
@@ -161,12 +159,12 @@
               <span>{{ row.punishNumber }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="处分名称" min-width="150px">
+          <el-table-column label="处分名称" width="180px">
             <template slot-scope="{row}">
               <span>{{ row.punishName }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="处分日期" width="110px" align="center">
+          <el-table-column label="处分日期" width="140px" align="center">
             <template slot-scope="{row}">
               <span>{{ row.punishDate }}</span>
             </template>
@@ -176,12 +174,12 @@
               <span>{{ row.disciplineCategory }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="违纪日期" align="center" width="120">
+          <el-table-column label="违纪日期" align="center" width="140">
             <template slot-scope="{row}">
               <span>{{ row.disciplineDate }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="处分接触原因" class-name="status-col" width="160">
+          <el-table-column label="处分解除原因" width="160">
             <template slot-scope="{row}">
               <span>{{ row.disciplineReason }}</span>
             </template>
@@ -241,7 +239,7 @@
 </template>
 
 <script>
-import { fetchAwardList, fetchPunishList, createArticle, updateArticle } from '@/api/student'
+import { fetchTAwardList, fetchTPunishList, createArticle, updateArticle } from '@/api/teacher'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -333,7 +331,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      fetchAwardList(this.listQuery).then(response => {
+      fetchTAwardList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 
@@ -345,7 +343,7 @@ export default {
     },
     getList1() {
       this.listLoading1 = true
-      fetchPunishList(this.listQuery1).then(response => {
+      fetchTPunishList(this.listQuery1).then(response => {
         this.list1 = response.data.items
         this.total1 = response.data.total
         console.log(this.list1)

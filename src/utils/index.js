@@ -2,6 +2,8 @@
  * Created by SongGaoke on 16/11/18.
  */
 
+import store from '@/store'
+
 /**
  * Parse the time to string
  * @param {(Object|string|number)} time
@@ -353,5 +355,26 @@ export function removeClass(ele, cls) {
   if (hasClass(ele, cls)) {
     const reg = new RegExp('(\\s|^)' + cls + '(\\s|$)')
     ele.className = ele.className.replace(reg, ' ')
+  }
+}
+
+/**
+ * judge authority
+ * @param {string} role
+ */
+export function isHasPermission(roles) {
+  const tokenData = store.getters.token
+  const tokenArr = tokenData.split('-')
+  console.log(tokenArr)
+
+  if (roles && roles instanceof Array) {
+    for (const role of roles) {
+      if (tokenArr.includes(role)) {
+        return true
+      }
+    }
+    return false
+  } else {
+    return tokenArr.includes(roles)
   }
 }

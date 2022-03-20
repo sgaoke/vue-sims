@@ -39,9 +39,16 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="序号" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+      <el-table-column label="序号" prop="id" sortable="custom" fixed align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" width="140" fixed class-name="small-padding fixed-width">
+        <template slot-scope="{row}">
+          <el-button type="primary" size="mini" @click="handleUpdate(row)">
+            查看
+          </el-button>
         </template>
       </el-table-column>
       <el-table-column label="课程名称" min-width="150px" align="center">
@@ -49,12 +56,12 @@
           <span>{{ row.course }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="授课教师" width="120">
+      <el-table-column label="授课教师" min-width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.teacher }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="考试时间" min-width="150px">
+      <el-table-column label="考试时间" min-width="150px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.examTime }}</span>
         </template>
@@ -72,13 +79,6 @@
       <el-table-column label="备注" align="center" width="160px">
         <template slot-scope="{row}">
           <span>{{ row.remark }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
-        <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            查看
-          </el-button>
         </template>
       </el-table-column>
     </el-table>

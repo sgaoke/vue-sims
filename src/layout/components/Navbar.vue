@@ -5,6 +5,7 @@
     <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
+      <span class="user-name"><i class="el-icon-user-solid" />&nbsp;{{ name }}</span>
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
@@ -44,7 +45,8 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'name'
     ])
   },
   methods: {
@@ -53,7 +55,8 @@ export default {
     },
     async logout() {
       await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      this.$router.push(`/login`)
     }
   }
 }
@@ -110,7 +113,14 @@ export default {
         }
       }
     }
-
+    .user-name {
+      display: inline-block;
+      vertical-align: top;
+      margin-right: 20px;
+      font-size: 18px;
+      font-weight: 500;
+      color: #40c9c6;
+    }
     .avatar-container {
       margin-right: 30px;
 

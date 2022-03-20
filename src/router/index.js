@@ -51,9 +51,10 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '首页', icon: 'dashboard' }
+      meta: { title: '首页', icon: 'dashboard', role: ['student', 'teacher', 'admin'] }
     }]
   },
+  // 学生角色 - 个人信息
   {
     path: '/personal',
     component: Layout,
@@ -62,10 +63,11 @@ export const constantRoutes = [
         path: 'index',
         name: 'Personal',
         component: () => import('@/views/personal/index'),
-        meta: { title: '个人信息', icon: 'el-icon-help' }
+        meta: { title: '个人信息', icon: 'el-icon-help', role: 'student' }
       }
     ]
   },
+  // 学生角色 - 成绩信息
   {
     path: '/grade',
     component: Layout,
@@ -74,10 +76,11 @@ export const constantRoutes = [
         path: 'index',
         name: 'Grade',
         component: () => import('@/views/grade/index'),
-        meta: { title: '成绩信息', icon: 'el-icon-notebook-1' }
+        meta: { title: '成绩信息', icon: 'el-icon-notebook-1', role: 'student' }
       }
     ]
   },
+  // 学生角色 - 课表信息
   {
     path: '/timetable',
     component: Layout,
@@ -86,10 +89,11 @@ export const constantRoutes = [
         path: 'index',
         name: 'Timetable',
         component: () => import('@/views/timetable/index'),
-        meta: { title: '课表信息', icon: 'el-icon-s-management' }
+        meta: { title: '课表信息', icon: 'el-icon-s-management', role: 'student' }
       }
     ]
   },
+  // 学生角色 - 奖惩信息
   {
     path: '/rewards',
     component: Layout,
@@ -98,7 +102,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Rewards',
         component: () => import('@/views/rewards/index'),
-        meta: { title: '奖惩信息', icon: 'el-icon-s-data' }
+        meta: { title: '奖惩信息', icon: 'el-icon-s-data', role: 'student' }
       }
     ]
   },
@@ -111,7 +115,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Student',
         component: () => import('@/views/student/index'),
-        meta: { title: '学生信息', icon: 'el-icon-odometer' }
+        meta: { title: '学生信息', icon: 'el-icon-odometer', role: 'teacher' }
       }
     ]
   },
@@ -124,7 +128,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Subject',
         component: () => import('@/views/subject/index'),
-        meta: { title: '课程信息', icon: 'el-icon-s-management' }
+        meta: { title: '课程信息', icon: 'el-icon-s-management', role: 'teacher' }
       }
     ]
   },
@@ -137,7 +141,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'TGrade',
         component: () => import('@/views/t-grade/index'),
-        meta: { title: '成绩信息', icon: 'el-icon-collection' }
+        meta: { title: '成绩信息', icon: 'el-icon-collection', role: 'teacher' }
       }
     ]
   },
@@ -150,7 +154,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'Department',
         component: () => import('@/views/department/index'),
-        meta: { title: '班级出勤信息', icon: 'el-icon-takeaway-box' }
+        meta: { title: '出勤信息', icon: 'el-icon-takeaway-box', role: 'teacher' }
       }
     ]
   },
@@ -163,7 +167,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'TRewards',
         component: () => import('@/views/t-rewards/index'),
-        meta: { title: '奖惩信息', icon: 'el-icon-s-data' }
+        meta: { title: '奖惩信息', icon: 'el-icon-s-data', role: 'teacher' }
       }
     ]
   },
@@ -176,11 +180,11 @@ export const constantRoutes = [
         path: 'index',
         name: 'Teacher',
         component: () => import('@/views/teacher/index'),
-        meta: { title: '宿舍信息', icon: 'el-icon-notebook-2' }
+        meta: { title: '宿舍信息', icon: 'el-icon-notebook-2', role: 'teacher' }
       }
     ]
   },
-  // 管理员-账号管理
+  // 管理员角色-账号管理
   {
     path: '/account-manage',
     component: Layout,
@@ -189,7 +193,7 @@ export const constantRoutes = [
         path: 'index',
         name: 'AccountManage',
         component: () => import('@/views/account-manage/index'),
-        meta: { title: '账号管理', icon: 'el-icon-s-data' }
+        meta: { title: '账号管理', icon: 'el-icon-s-data', role: 'admin' }
       }
     ]
   },

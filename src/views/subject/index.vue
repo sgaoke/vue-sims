@@ -5,12 +5,12 @@
         <el-row :gutter="10">
           <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
             <el-form-item label="课程编号">
-              <el-input v-model="listQuery.title" placeholder="请输入课程编号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+              <el-input v-model="listQuery.courseNumber" placeholder="请输入课程编号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
             </el-form-item>
           </el-col>
           <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
             <el-form-item label="课程名称">
-              <el-input v-model="listQuery.title" placeholder="请输入课程名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+              <el-input v-model="listQuery.courseName" placeholder="请输入课程名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
             </el-form-item>
           </el-col>
           <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
@@ -58,9 +58,9 @@
           <span>{{ row.courseNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="课程名称" min-width="150px">
+      <el-table-column label="课程名称" width="150px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.course }}</span>
+          <span>{{ row.courseName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="课程类型" width="160px" align="center">
@@ -68,24 +68,24 @@
           <span>{{ row.courseType }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="授课教师" width="120px">
+      <el-table-column label="授课教师" width="140px" align="center">
         <template slot-scope="{row}">
           <span>{{ row.teacher }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="上课时间" align="center" width="150px">
+      <el-table-column label="上课时间" align="center" width="160px">
         <template slot-scope="{row}">
-          <span>{{ row.schooltime }}</span>
+          <span>{{ row.schoolTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="上课地点" align="center" width="150px">
+      <el-table-column label="上课地点" align="center" width="240px">
         <template slot-scope="{row}">
-          <span>{{ row.schooltime }}</span>
+          <span>{{ row.schoolAddress }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="联系电话" align="center" width="150px">
+      <el-table-column label="联系电话" align="center" width="160px">
         <template slot-scope="{row}">
-          <span>{{ row.schooltime }}</span>
+          <span>{{ row.contact }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -140,7 +140,7 @@
 </template>
 
 <script>
-import { fetchTimeTableList, createArticle, updateArticle } from '@/api/student'
+import { fetchSubjectList, createArticle, updateArticle } from '@/api/teacher'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -184,9 +184,8 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
+        courseNumber: undefined,
+        courseName: undefined,
         sort: '+id'
       },
       importanceOptions: [1, 2, 3],
@@ -225,7 +224,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      fetchTimeTableList(this.listQuery).then(response => {
+      fetchSubjectList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 

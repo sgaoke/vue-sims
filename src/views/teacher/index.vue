@@ -5,12 +5,12 @@
         <el-row :gutter="10">
           <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
             <el-form-item label="宿舍名称">
-              <el-input v-model="listQuery.title" placeholder="请输入宿舍名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+              <el-input v-model="listQuery.dormName" placeholder="请输入宿舍名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
             </el-form-item>
           </el-col>
           <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
             <el-form-item label="学生姓名">
-              <el-input v-model="listQuery.title" placeholder="请输入学生姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+              <el-input v-model="listQuery.studentName" placeholder="请输入学生姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
             </el-form-item>
           </el-col>
           <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
@@ -53,34 +53,34 @@
           </el-button>
         </template>
       </el-table-column>
-      <el-table-column label="学号" width="160px" align="center">
+      <el-table-column label="学号" width="150px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.courseNumber }}</span>
+          <span>{{ row.studentNumber }}</span>
         </template>
       </el-table-column>
       <el-table-column label="姓名" width="150px">
         <template slot-scope="{row}">
-          <span>{{ row.course }}</span>
+          <span>{{ row.studentName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="性别" width="160px" align="center">
+      <el-table-column label="性别" width="120px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.courseType }}</span>
+          <span>{{ row.gender }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="宿舍名称" min-width="120px">
+      <el-table-column label="宿舍名称" min-width="150px">
         <template slot-scope="{row}">
-          <span>{{ row.teacher }}</span>
+          <span>{{ row.dormName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="班级名称" align="center" width="150px">
+      <el-table-column label="班级名称" min-width="150px">
         <template slot-scope="{row}">
-          <span>{{ row.schooltime }}</span>
+          <span>{{ row.className }}</span>
         </template>
       </el-table-column>
       <el-table-column label="联系电话" align="center" width="150px">
         <template slot-scope="{row}">
-          <span>{{ row.schooltime }}</span>
+          <span>{{ row.contact }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -135,7 +135,7 @@
 </template>
 
 <script>
-import { fetchTimeTableList, createArticle, updateArticle } from '@/api/student'
+import { fetchDormList, createArticle, updateArticle } from '@/api/teacher'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -179,9 +179,8 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
+        dormName: undefined,
+        studentName: undefined,
         sort: '+id'
       },
       importanceOptions: [1, 2, 3],
@@ -220,7 +219,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      fetchTimeTableList(this.listQuery).then(response => {
+      fetchDormList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 

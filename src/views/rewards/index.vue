@@ -12,9 +12,16 @@
           style="width: 100%;"
           @sort-change="sortChange"
         >
-          <el-table-column label="序号" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+          <el-table-column label="序号" prop="id" sortable="custom" fixed align="center" width="80" :class-name="getSortClass('id')">
             <template slot-scope="{row}">
               <span>{{ row.id }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" align="center" width="140" fixed class-name="small-padding fixed-width">
+            <template slot-scope="{row}">
+              <el-button type="primary" size="mini" @click="handleUpdate(row)">
+                查看
+              </el-button>
             </template>
           </el-table-column>
           <el-table-column label="奖励编号" width="150px" align="center">
@@ -22,12 +29,12 @@
               <span>{{ row.awardNumber }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="奖励项目" min-width="150px">
+          <el-table-column label="奖励项目" min-width="150px" align="center">
             <template slot-scope="{row}">
               <span>{{ row.awardProject }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="奖励级别" width="120px" align="center">
+          <el-table-column label="奖励级别" min-width="150px" align="center">
             <template slot-scope="{row}">
               <span>{{ row.awardLevel }}</span>
             </template>
@@ -42,16 +49,9 @@
               <span>{{ row.awardCategory }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="奖励金额" class-name="status-col" width="120">
+          <el-table-column label="奖励金额" width="120">
             <template slot-scope="{row}">
               <span>{{ row.awardBonus }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
-            <template slot-scope="{row}">
-              <el-button type="primary" size="mini" @click="handleUpdate(row)">
-                查看
-              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -69,46 +69,46 @@
           style="width: 100%;"
           @sort-change="sortChange1"
         >
-          <el-table-column label="序号" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass1('id')">
+          <el-table-column label="序号" prop="id" sortable="custom" fixed align="center" width="80" :class-name="getSortClass1('id')">
             <template slot-scope="{row}">
               <span>{{ row.id }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="处分编号" width="150px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.punishNumber }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="处分名称" min-width="150px">
-            <template slot-scope="{row}">
-              <span>{{ row.punishName }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="处分日期" width="110px" align="center">
-            <template slot-scope="{row}">
-              <span>{{ row.punishDate }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="违纪类别" width="120px">
-            <template slot-scope="{row}">
-              <span>{{ row.disciplineCategory }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="违纪日期" align="center" width="120">
-            <template slot-scope="{row}">
-              <span>{{ row.disciplineDate }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="处分接触原因" class-name="status-col" width="160">
-            <template slot-scope="{row}">
-              <span>{{ row.disciplineReason }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+          <el-table-column label="操作" align="center" width="140" fixed class-name="small-padding fixed-width">
             <template slot-scope="{row}">
               <el-button type="primary" size="mini" @click="handleUpdate(row)">
                 查看
               </el-button>
+            </template>
+          </el-table-column>
+          <el-table-column label="处分编号" min-width="150px" align="center">
+            <template slot-scope="{row}">
+              <span>{{ row.punishNumber }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="处分名称" min-width="150px" align="center">
+            <template slot-scope="{row}">
+              <span>{{ row.punishName }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="处分日期" width="130px" align="center">
+            <template slot-scope="{row}">
+              <span>{{ row.punishDate }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="违纪类别" width="130px">
+            <template slot-scope="{row}">
+              <span>{{ row.disciplineCategory }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="违纪日期" align="center" width="130">
+            <template slot-scope="{row}">
+              <span>{{ row.disciplineDate }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="处分解除原因" width="180">
+            <template slot-scope="{row}">
+              <span>{{ row.disciplineReason }}</span>
             </template>
           </el-table-column>
         </el-table>

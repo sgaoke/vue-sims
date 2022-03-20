@@ -5,12 +5,12 @@
         <el-row :gutter="10">
           <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6">
             <el-form-item label="学生学号">
-              <el-input v-model="listQuery.title" placeholder="请输入学生学号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+              <el-input v-model="listQuery.studentNumber" placeholder="请输入学生学号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
             </el-form-item>
           </el-col>
           <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6">
             <el-form-item label="学生姓名">
-              <el-input v-model="listQuery.title" placeholder="请输入学生姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+              <el-input v-model="listQuery.studentName" placeholder="请输入学生姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
             </el-form-item>
           </el-col>
           <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
@@ -64,35 +64,35 @@
           </el-table-column>
           <el-table-column label="班级名称" min-width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.course }}</span>
+              <span>{{ row.className }}</span>
             </template>
           </el-table-column>
           <el-table-column label="学生学号" min-width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.course }}</span>
+              <span>{{ row.studentNumber }}</span>
             </template>
           </el-table-column>
           <el-table-column label="学生姓名" min-width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.course }}</span>
+              <span>{{ row.studentName }}</span>
             </template>
           </el-table-column>
           <el-table-column label="课程名称" min-width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.course }}</span>
+              <span>{{ row.courseName }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="课程分数" min-width="150px" align="center">
+          <el-table-column label="课程分数" min-width="120px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.course }}</span>
+              <span>{{ row.courseScore }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="授课教师" width="120">
+          <el-table-column label="授课教师" width="140">
             <template slot-scope="{row}">
               <span>{{ row.teacher }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="考试时间" min-width="150px">
+          <el-table-column label="考试时间" width="150px">
             <template slot-scope="{row}">
               <span>{{ row.examTime }}</span>
             </template>
@@ -107,9 +107,9 @@
               <span>{{ row.scoreRank }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="成绩修改原因" width="120px" align="center">
+          <el-table-column label="成绩修改原因" width="160px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
+              <span>{{ row.scoreReason }}</span>
             </template>
           </el-table-column>
           <el-table-column label="备注" align="center" width="160px">
@@ -124,14 +124,14 @@
       </el-tab-pane>
       <el-tab-pane label="总成绩信息" name="totalScore">
         <el-table
-          :key="tableKey"
-          v-loading="listLoading"
-          :data="list"
+          :key="tableKey1"
+          v-loading="listLoading1"
+          :data="list1"
           border
           fit
           highlight-current-row
           style="width: 100%;"
-          @sort-change="sortChange"
+          @sort-change="sortChange1"
         >
           <el-table-column label="序号" prop="id" sortable="custom" fixed align="center" width="80" :class-name="getSortClass('id')">
             <template slot-scope="{row}">
@@ -151,129 +151,129 @@
               </el-button>
             </template>
           </el-table-column>
-          <el-table-column label="班级名称" min-width="150px" align="center">
+          <el-table-column label="班级名称" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.course }}</span>
+              <span>{{ row.className }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="学生学号" min-width="150px" align="center">
+          <el-table-column label="学生学号" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.course }}</span>
+              <span>{{ row.studentNumber }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="学生姓名" min-width="150px" align="center">
+          <el-table-column label="学生姓名" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.course }}</span>
+              <span>{{ row.studentName }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="语文" min-width="150px" align="center">
+          <el-table-column label="语文" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.course }}</span>
+              <span>{{ row.courseYW }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="数学" min-width="150px" align="center">
+          <el-table-column label="数学" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.course }}</span>
+              <span>{{ row.courseSX }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="英语" width="120">
+          <el-table-column label="英语" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.teacher }}</span>
+              <span>{{ row.courseYY }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="政治" width="150px">
+          <el-table-column label="政治" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.examTime }}</span>
+              <span>{{ row.courseZZ }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="生物（操作）" width="120px" align="center">
+          <el-table-column label="生物（操作）" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.examScore }}</span>
+              <span>{{ row.courseSWCZ }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="生物" width="120px" align="center">
+          <el-table-column label="生物" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
+              <span>{{ row.courseSW }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="物理（操作）" align="center" width="160px">
+          <el-table-column label="物理（操作）" align="center" width="150px">
             <template slot-scope="{row}">
-              <span>{{ row.remark }}</span>
+              <span>{{ row.courseWLCZ }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="物理" width="120px" align="center">
+          <el-table-column label="物理" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
+              <span>{{ row.courseWL }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="化学（操作）" width="120px" align="center">
+          <el-table-column label="化学（操作）" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
+              <span>{{ row.courseHXCZ }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="化学" width="120px" align="center">
+          <el-table-column label="化学" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
+              <span>{{ row.courseHX }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="地理" width="120px" align="center">
+          <el-table-column label="地理" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
+              <span>{{ row.courseDL }}</span>
             </template>
           </el-table-column>
           <el-table-column label="地理（户外考察）" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
+              <span>{{ row.courseDLHWKC }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="体育" width="120px" align="center">
+          <el-table-column label="体育" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
+              <span>{{ row.courseTY }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="微机实验课" width="120px" align="center">
+          <el-table-column label="微机实验课" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
+              <span>{{ row.courseWJSYK }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="微机" width="120px" align="center">
+          <el-table-column label="微机" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
+              <span>{{ row.courseWJ }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="音乐" width="120px" align="center">
+          <el-table-column label="音乐" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
+              <span>{{ row.courseYYUE }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="美术" width="120px" align="center">
+          <el-table-column label="美术" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
+              <span>{{ row.courseMS }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="总成绩" width="120px" align="center">
+          <el-table-column label="总成绩" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
+              <span>{{ row.scoreTotalScore }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="总成绩排名" width="120px" align="center">
+          <el-table-column label="总成绩排名" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
+              <span>{{ row.scoreTotalRank }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="成绩修改原因" width="120px" align="center">
+          <el-table-column label="成绩修改原因" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
+              <span>{{ row.scoreReason }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="备注" width="120px" align="center">
+          <el-table-column label="备注" width="150px" align="center">
             <template slot-scope="{row}">
               <span>{{ row.scoreRank }}</span>
             </template>
           </el-table-column>
         </el-table>
 
-        <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
+        <pagination v-show="total1>0" :total="total1" :page.sync="listQuery1.page" :limit.sync="listQuery1.limit" @pagination="getList1" />
 
       </el-tab-pane>
     </el-tabs>
@@ -325,7 +325,7 @@
 </template>
 
 <script>
-import { fetchGradeList, createArticle, updateArticle } from '@/api/student'
+import { fetchTGradeList, fetchTotalGradeList, createArticle, updateArticle } from '@/api/teacher'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -370,8 +370,20 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        title: undefined,
-        examTime: undefined
+        studentNumber: undefined,
+        studentName: undefined,
+        sort: '+id'
+      },
+      tableKey1: 0,
+      list1: null,
+      total1: 0,
+      listLoading1: true,
+      listQuery1: {
+        page: 1,
+        limit: 10,
+        studentNumber: undefined,
+        studentName: undefined,
+        sort: '+id'
       },
       importanceOptions: [1, 2, 3],
       calendarTypeOptions,
@@ -405,12 +417,13 @@ export default {
   },
   created() {
     this.getList()
+    this.getList1()
   },
   methods: {
     getList() {
       console.log(this.listQuery)
       this.listLoading = true
-      fetchGradeList(this.listQuery).then(response => {
+      fetchTGradeList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 
@@ -420,9 +433,26 @@ export default {
         }, 1.5 * 1000)
       })
     },
+    getList1() {
+      console.log(this.listQuery1)
+      this.listLoading1 = true
+      fetchTotalGradeList(this.listQuery1).then(response => {
+        this.list1 = response.data.items
+        this.total1 = response.data.total
+
+        // Just to simulate the time of the request
+        setTimeout(() => {
+          this.listLoading1 = false
+        }, 1.5 * 1000)
+      })
+    },
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
+    },
+    handleFilter1() {
+      this.listQuery1.page = 1
+      this.getList1()
     },
     handleModifyStatus(row, status) {
       this.$message({
@@ -437,6 +467,12 @@ export default {
         this.sortByID(order)
       }
     },
+    sortChange1(data) {
+      const { prop, order } = data
+      if (prop === 'id') {
+        this.sortByID1(order)
+      }
+    },
     sortByID(order) {
       if (order === 'ascending') {
         this.listQuery.sort = '+id'
@@ -444,6 +480,14 @@ export default {
         this.listQuery.sort = '-id'
       }
       this.handleFilter()
+    },
+    sortByID1(order) {
+      if (order === 'ascending') {
+        this.listQuery1.sort = '+id'
+      } else {
+        this.listQuery1.sort = '-id'
+      }
+      this.handleFilter1()
     },
     resetTemp() {
       this.temp = {

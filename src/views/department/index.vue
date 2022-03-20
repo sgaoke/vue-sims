@@ -5,12 +5,12 @@
         <el-row :gutter="10">
           <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
             <el-form-item label="学生学号">
-              <el-input v-model="listQuery.title" placeholder="请输入学生学号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+              <el-input v-model="listQuery.studentNumber" placeholder="请输入学生学号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
             </el-form-item>
           </el-col>
           <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
             <el-form-item label="学生姓名">
-              <el-input v-model="listQuery.title" placeholder="请输入学生姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+              <el-input v-model="listQuery.studentName" placeholder="请输入学生姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
             </el-form-item>
           </el-col>
           <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
@@ -42,7 +42,7 @@
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="Actions" align="center" width="230" fixed class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="230" fixed class-name="small-padding fixed-width">
         <template slot-scope="{row,$index}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             查看
@@ -57,59 +57,52 @@
       </el-table-column>
       <el-table-column label="班级号" width="150px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ row.classNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="班级名称" min-width="150px">
+      <el-table-column label="班级名称" width="150px" align="center">
         <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
-          <el-tag>{{ row.type | typeFilter }}</el-tag>
+          <span>{{ row.className }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="学生学号" width="110px" align="center">
+      <el-table-column label="学生学号" width="140px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.author }}</span>
+          <span>{{ row.studentNumber }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="学生姓名" width="110px" align="center">
+      <el-table-column label="学生姓名" width="120px" align="center">
         <template slot-scope="{row}">
-          <span style="color:red;">{{ row.reviewer }}</span>
+          <span>{{ row.studentName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="迟到时间" width="80px">
+      <el-table-column label="迟到时间" width="140px" align="center">
         <template slot-scope="{row}">
-          <svg-icon v-for="n in + row.importance" :key="n" icon-class="star" class="meta-item__icon" />
+          <span>{{ row.layTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="迟到原因" align="center" width="95">
+      <el-table-column label="迟到原因" align="center" width="160px">
         <template slot-scope="{row}">
-          <span v-if="row.pageviews" class="link-type" @click="handleFetchPv(row.pageviews)">{{ row.pageviews }}</span>
-          <span v-else>0</span>
+          <span>{{ row.layReason }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="早退时间" class-name="status-col" width="100">
+      <el-table-column label="早退时间" width="140" align="center">
         <template slot-scope="{row}">
-          <el-tag :type="row.status | statusFilter">
-            {{ row.status }}
-          </el-tag>
+          <span>{{ row.earlyTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="早退原因" class-name="status-col" width="100">
+      <el-table-column label="早退原因" width="160" align="center">
         <template slot-scope="{row}">
-          <el-tag :type="row.status | statusFilter">
-            {{ row.status }}
-          </el-tag>
+          <span>{{ row.earlyReason }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="请假时间" width="80px">
+      <el-table-column label="请假时间" width="140px" align="center">
         <template slot-scope="{row}">
-          <svg-icon v-for="n in + row.importance" :key="n" icon-class="star" class="meta-item__icon" />
+          <span>{{ row.leaveTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="请假原因" align="center" width="95">
+      <el-table-column label="请假原因" align="center" width="140">
         <template slot-scope="{row}">
-          <span v-if="row.pageviews" class="link-type" @click="handleFetchPv(row.pageviews)">{{ row.pageviews }}</span>
-          <span v-else>0</span>
+          <span>{{ row.leaveReason }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -164,7 +157,7 @@
 </template>
 
 <script>
-import { fetchList, fetchPv, createArticle, updateArticle } from '@/api/article'
+import { fetchDepartmentList, fetchPv, createArticle, updateArticle } from '@/api/teacher'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -208,9 +201,8 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
+        studentNumber: undefined,
+        studentName: undefined,
         sort: '+id'
       },
       importanceOptions: [1, 2, 3],
@@ -249,7 +241,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      fetchList(this.listQuery).then(response => {
+      fetchDepartmentList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 
