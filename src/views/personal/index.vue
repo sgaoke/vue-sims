@@ -136,23 +136,24 @@
 </template>
 
 <script>
+import { fetchPersonInfo, savePersonInfo } from '@/api/student'
 export default {
   data() {
     return {
       isEdit: false,
       ruleForm: {
-        number: '2018051613004',
-        name: '李筛筛',
-        gender: '女',
-        cType: '居民身份证',
-        cNumber: '500230199902122333',
-        birthDate: '1999-02-12',
-        nation: '汉族',
-        politicsStatus: '中共党员',
-        address: '重庆市沙坪坝区',
-        contact: '1234567890',
-        isCampus: '是',
-        grade: '初二'
+        number: '',
+        name: '',
+        gender: '',
+        cType: '',
+        cNumber: '',
+        birthDate: '',
+        nation: '',
+        politicsStatus: '',
+        address: '',
+        contact: '',
+        isCampus: '',
+        grade: ''
       },
       rules: {
         number: [
@@ -165,18 +166,49 @@ export default {
         gender: [
           { required: false, message: '请输入性别', trigger: 'blur' }
         ]
+      },
+      query: {
+        page: 1,
+        limit: 10,
+        number: '2018051613004'
       }
     }
   },
+  created() {
+    this.getPersonInfo()
+  },
   methods: {
+    getPersonInfo() {
+      // console.log(this.listQuery)
+      // this.listLoading = true
+      console.log(this.query)
+      fetchPersonInfo(this.query).then(response => {
+        // console.log(response.data.items[0])
+        this.ruleForm = response.data.items[0]
+
+        // Just to simulate the time of the request
+        // setTimeout(() => {
+        //   this.listLoading = false
+        // }, 1.5 * 1000)
+      })
+    },
     onEdit() {
       this.isEdit = !this.isEdit
     },
     onSave() {
-      this.isEdit = !this.isEdit
-      this.$message({
-        message: '保存成功',
-        type: 'success'
+      const _self = this
+      const ruleFormData = Object.assign({}, this.ruleForm)
+      _self.isEdit = !_self.isEdit
+      // console.log(ruleFormData)
+      savePersonInfo(ruleFormData).then((res) => {
+        // console.log(res)
+        this.ruleForm = res.data
+        _self.$notify({
+          title: 'Success',
+          message: 'Update Successfully',
+          type: 'success',
+          duration: 2000
+        })
       })
     }
   }

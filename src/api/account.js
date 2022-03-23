@@ -16,3 +16,51 @@ export function fetchATeacherList(query) {
   })
 }
 
+export function createStudentAccount(data) {
+  return request({
+    url: '/vue-element-admin/student-account/create',
+    method: 'post',
+    data
+  })
+}
+
+export function updateStudentAccount(data) {
+  return request({
+    url: '/vue-element-admin/student-account/update',
+    method: 'post',
+    data
+  })
+}
+
+export function deleteStudentAccount(data) {
+  return request({
+    url: '/vue-element-admin/student-account/delete',
+    method: 'post',
+    data
+  })
+}
+
+export function createTeacherAccount(data) {
+  return request({
+    url: '/vue-element-admin/teacher-account/create',
+    method: 'post',
+    data
+  })
+}
+
+export function updateTeacherAccount(data) {
+  return request({
+    url: '/vue-element-admin/teacher-account/update',
+    method: 'post',
+    data
+  })
+}
+
+export function deleteTeacherAccount(data) {
+  return request({
+    url: '/vue-element-admin/teacher-account/delete',
+    method: 'post',
+    data
+  })
+}
+

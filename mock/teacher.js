@@ -31,7 +31,7 @@ Mock.Random.extend({
 for (let i = 0; i < studentCount; i++) {
   studentList.push(Mock.mock({
     id: i + 1,
-    'studentNumber|100000-999999': 100000,
+    'studentNumber|2018051613000-2018051613999': 2018051613000,
     studentName: '@cname',
     'gender|1': ['男', '女'],
     'idType|1': ['居民身份证', '护照'],

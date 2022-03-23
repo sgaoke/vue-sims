@@ -1,5 +1,19 @@
 import request from '@/utils/request'
 
+export function fetchPersonInfo(query) {
+  return request({
+    url: '/vue-element-admin/person/info',
+    method: 'get',
+    params: query
+  })
+}
+export function savePersonInfo(data) {
+  return request({
+    url: '/vue-element-admin/personinfo/save',
+    method: 'post',
+    data
+  })
+}
 export function fetchGradeList(query) {
   return request({
     url: '/vue-element-admin/grade/list',

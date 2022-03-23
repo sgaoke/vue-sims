@@ -18,9 +18,9 @@ Mock.Random.extend({
 for (let i = 0; i < astudentCount; i++) {
   astudentList.push(Mock.mock({
     id: i + 1,
-    'studentNumber|100000-999999': 100000,
+    'studentNumber|2022000000-2022009999': 2022000000,
     studentName: '@cname',
-    'gender|1': ['男', '女'],
+    'gender|1': ['male', 'female'],
     'password|100000-999999': 100000,
     email: '@email'
   }))
@@ -29,9 +29,9 @@ for (let i = 0; i < astudentCount; i++) {
 for (let i = 0; i < ateacherCount; i++) {
   ateacherList.push(Mock.mock({
     id: i + 1,
-    'teacherNumber|1000000-9999999': 1000000,
-    studentName: '@cname',
-    'gender|1': ['男', '女'],
+    'teacherNumber|2022000000-2022009999': 2022000000,
+    teacherName: '@cname',
+    'gender|1': ['male', 'female'],
     'password|100000-999999': 100000,
     email: '@email'
   }))
@@ -42,10 +42,10 @@ module.exports = [
     url: '/vue-element-admin/astudent/list',
     type: 'get',
     response: config => {
-      const { title, page = 1, limit = 10, sort } = config.query
-
+      const { studentNumber, studentName, page = 1, limit = 10, sort } = config.query
       let mockList = astudentList.filter(item => {
-        if (title && item.title.indexOf(title) < 0) return false
+        if (studentNumber && ('' + item.studentNumber).indexOf(studentNumber) < 0) return false
+        if (studentName && item.studentName.indexOf(studentName) < 0) return false
         return true
       })
 
@@ -68,10 +68,10 @@ module.exports = [
     url: '/vue-element-admin/ateacher/list',
     type: 'get',
     response: config => {
-      const { title, page = 1, limit = 10, sort } = config.query
-
+      const { teacherNumber, teacherName, page = 1, limit = 10, sort } = config.query
       let mockList = ateacherList.filter(item => {
-        if (title && item.title.indexOf(title) < 0) return false
+        if (teacherNumber && ('' + item.teacherNumber).indexOf(teacherNumber) < 0) return false
+        if (teacherName && item.teacherName.indexOf(teacherName) < 0) return false
         return true
       })
 
@@ -91,23 +91,123 @@ module.exports = [
     }
   },
   {
-    url: '/vue-element-admin/article/create',
+    url: '/vue-element-admin/student-account/create',
     type: 'post',
-    response: _ => {
+    response: config => {
+      const createData = config.body
+      astudentList.unshift(createData)
+      const pageList = astudentList.map((item, index) => {
+        item.id = index + 1
+      })
       return {
         code: 20000,
-        data: 'success'
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
       }
     }
   },
 
   {
-    url: '/vue-element-admin/article/update',
+    url: '/vue-element-admin/student-account/update',
     type: 'post',
-    response: _ => {
+    response: config => {
+      const updateData = config.body
+      const index = astudentList.findIndex(v => v.id === updateData.id)
+      astudentList[index] = updateData
+      const pageList = astudentList.map((item, index) => {
+        item.id = index + 1
+      })
       return {
         code: 20000,
-        data: 'success'
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/vue-element-admin/student-account/delete',
+    type: 'post',
+    response: config => {
+      const deleteData = config.body
+      const index = astudentList.findIndex(v => v.id === deleteData.id)
+      astudentList.splice(index, 1)
+      const pageList = astudentList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/vue-element-admin/teacher-account/create',
+    type: 'post',
+    response: config => {
+      const createData = config.body
+      ateacherList.unshift(createData)
+      const pageList = ateacherList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+
+  {
+    url: '/vue-element-admin/teacher-account/update',
+    type: 'post',
+    response: config => {
+      const updateData = config.body
+      const index = ateacherList.findIndex(v => v.id === updateData.id)
+      ateacherList[index] = updateData
+      const pageList = ateacherList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+
+  {
+    url: '/vue-element-admin/teacher-account/delete',
+    type: 'post',
+    response: config => {
+      const deleteData = config.body
+      const index = ateacherList.findIndex(v => v.id === deleteData.id)
+      ateacherList.splice(index, 1)
+      const pageList = ateacherList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
       }
     }
   }
