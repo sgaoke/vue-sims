@@ -309,10 +309,17 @@
           <span>{{ temp.studentName }}</span>
         </el-form-item>
 
-        <el-form-item label="课程名称">
+        <el-form-item v-if="dialogStatus !== 'view'" label="课程名称" prop="courseName">
+          <el-input v-model="temp.courseName" />
+        </el-form-item>
+        <el-form-item v-else label="课程名称">
+          <span>{{ temp.courseName }}</span>
+        </el-form-item>
+
+        <!-- <el-form-item label="课程名称">
           <el-input v-if="dialogStatus !== 'view'" v-model="temp.courseName" />
           <span v-else>{{ temp.courseName }}</span>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="课程分数">
           <el-input v-if="dialogStatus !== 'view'" v-model="temp.courseScore" />
           <span v-else>{{ temp.courseScore }}</span>
@@ -413,7 +420,8 @@ export default {
       rules: {
         className: [{ required: true, message: '班级名称是必填项', trigger: 'blur' }],
         studentNumber: [{ required: true, message: '学号是必填项', trigger: 'blur' }],
-        studentName: [{ required: true, message: '姓名是必填项', trigger: 'blur' }]
+        studentName: [{ required: true, message: '姓名是必填项', trigger: 'blur' }],
+        courseName: [{ required: true, message: '课程名称是必填项', trigger: 'blur' }]
       },
       downloadLoading: false
     }

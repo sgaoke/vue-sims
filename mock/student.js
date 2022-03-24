@@ -129,7 +129,7 @@ module.exports = [
     response: config => {
       const { number, page = 1, limit = 10 } = config.query
       // console.log(number)
-      // console.log(personInfoList)
+      console.log(personInfoList)
       const mockList = personInfoList.filter(item => {
         if (number && ('' + item.number).indexOf(number) < 0) return false
         return true
@@ -151,6 +151,7 @@ module.exports = [
     type: 'post',
     response: config => {
       const updateData = config.body
+      console.log(personInfoList)
       const index = personInfoList.findIndex(v => v.number === updateData.number)
       personInfoList[index] = updateData
 

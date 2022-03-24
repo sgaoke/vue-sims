@@ -65,7 +65,7 @@
       </el-table-column>
       <el-table-column label="性别" width="120px" align="center">
         <template slot-scope="{row}">
-          <span>{{ row.gender }}</span>
+          <span>{{ row.gender | typeFilter }}</span>
         </template>
       </el-table-column>
       <el-table-column label="宿舍名称" min-width="150px">
