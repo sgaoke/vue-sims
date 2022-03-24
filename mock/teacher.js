@@ -33,7 +33,7 @@ for (let i = 0; i < studentCount; i++) {
     id: i + 1,
     'studentNumber|2018051613000-2018051613999': 2018051613000,
     studentName: '@cname',
-    'gender|1': ['男', '女'],
+    'gender|1': ['male', 'female'],
     'idType|1': ['居民身份证', '护照'],
     idNumber: Mock.Random.id(),
     birthDate: '@date',
@@ -50,7 +50,7 @@ for (let i = 0; i < subjectCount; i++) {
   subjectList.push(Mock.mock({
     // id: '@increment()',
     id: i + 1,
-    'courseNumber|10000-99999': 10000,
+    'courseNumber|20220000-20229999': 20220000,
     'courseName|1': ['语文', '数学', '英语', '政治', '生物', '物理', '化学', '地理', '体育', '微机', '音乐', '美术'],
     'courseType|1': ['学科课程', '综合课程', '实验课程', '户外活动课'],
     teacher: '@cname',
@@ -112,9 +112,9 @@ for (let i = 0; i < totalGradeCount; i++) {
 for (let i = 0; i < departmentCount; i++) {
   departmentList.push(Mock.mock({
     id: i + 1,
-    'classNumber|1000-9999': 1000,
+    'classNumber|20221000-20229999': 20221000,
     'className|1': ['初一一班', '初一二班', '初一三班', '初二一班', '初二二班', '初三一班'],
-    'studentNumber|100000-999999': 100000,
+    'studentNumber|202200000-202299999': 202200000,
     studentName: '@cname',
     layTime: '@date',
     'layReason|1': ['堵车', '睡过头了', '未设置闹钟'],
@@ -203,9 +203,8 @@ for (let i = 0; i < dormCount; i++) {
       '清风苑b栋2-1',
       '清风苑b栋2-3',
       '雅风苑a栋3-1',
-      '清风苑b栋2-3',
-      '清风苑b栋2-3',
-      '雅风苑a栋3-1'],
+      '雅风苑a栋3-2',
+      '雅风苑a栋3-3'],
     'className|1': ['初一一班', '初一二班', '初一三班', '初二一班', '初二二班', '初三一班'],
     'contact|1': '@phone'
   }))
@@ -216,10 +215,10 @@ module.exports = [
     url: '/vue-element-admin/student/list',
     type: 'get',
     response: config => {
-      const { title, page = 1, limit = 10, sort } = config.query
-
+      const { studentNumber, studentName, page = 1, limit = 10, sort } = config.query
       let mockList = studentList.filter(item => {
-        if (title && item.title.indexOf(title) < 0) return false
+        if (studentNumber && ('' + item.studentNumber).indexOf(studentNumber) < 0) return false
+        if (studentName && item.studentName.indexOf(studentName) < 0) return false
         return true
       })
 
@@ -239,13 +238,72 @@ module.exports = [
     }
   },
   {
+    url: '/vue-element-admin/student/create',
+    type: 'post',
+    response: config => {
+      const createData = config.body
+      studentList.unshift(createData)
+      const pageList = studentList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/vue-element-admin/student/update',
+    type: 'post',
+    response: config => {
+      const updateData = config.body
+      const index = studentList.findIndex(v => v.id === updateData.id)
+      studentList[index] = updateData
+      const pageList = studentList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/vue-element-admin/student/delete',
+    type: 'post',
+    response: config => {
+      const deleteData = config.body
+      const index = studentList.findIndex(v => v.id === deleteData.id)
+      studentList.splice(index, 1)
+      const pageList = studentList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
     url: '/vue-element-admin/subject/list',
     type: 'get',
     response: config => {
-      const { title, page = 1, limit = 10, sort } = config.query
-
+      const { courseNumber, courseName, page = 1, limit = 10, sort } = config.query
       let mockList = subjectList.filter(item => {
-        if (title && item.title.indexOf(title) < 0) return false
+        if (courseNumber && ('' + item.courseNumber).indexOf(courseNumber) < 0) return false
+        if (courseName && item.courseName.indexOf(courseName) < 0) return false
         return true
       })
 
@@ -259,6 +317,65 @@ module.exports = [
         code: 20000,
         data: {
           total: mockList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/vue-element-admin/subject/create',
+    type: 'post',
+    response: config => {
+      const createData = config.body
+      subjectList.unshift(createData)
+      const pageList = subjectList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/vue-element-admin/subject/update',
+    type: 'post',
+    response: config => {
+      const updateData = config.body
+      const index = subjectList.findIndex(v => v.id === updateData.id)
+      subjectList[index] = updateData
+      const pageList = subjectList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/vue-element-admin/subject/delete',
+    type: 'post',
+    response: config => {
+      const deleteData = config.body
+      const index = subjectList.findIndex(v => v.id === deleteData.id)
+      subjectList.splice(index, 1)
+      const pageList = subjectList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
           items: pageList
         }
       }
@@ -320,10 +437,10 @@ module.exports = [
     url: '/vue-element-admin/department/list',
     type: 'get',
     response: config => {
-      const { title, page = 1, limit = 10, sort } = config.query
-
+      const { studentNumber, studentName, page = 1, limit = 10, sort } = config.query
       let mockList = departmentList.filter(item => {
-        if (title && item.title.indexOf(title) < 0) return false
+        if (studentNumber && ('' + item.studentNumber).indexOf(studentNumber) < 0) return false
+        if (studentName && item.studentName.indexOf(studentName) < 0) return false
         return true
       })
 
@@ -337,6 +454,65 @@ module.exports = [
         code: 20000,
         data: {
           total: mockList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/vue-element-admin/department/create',
+    type: 'post',
+    response: config => {
+      const createData = config.body
+      departmentList.unshift(createData)
+      const pageList = departmentList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/vue-element-admin/department/update',
+    type: 'post',
+    response: config => {
+      const updateData = config.body
+      const index = departmentList.findIndex(v => v.id === updateData.id)
+      departmentList[index] = updateData
+      const pageList = departmentList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/vue-element-admin/department/delete',
+    type: 'post',
+    response: config => {
+      const deleteData = config.body
+      const index = departmentList.findIndex(v => v.id === deleteData.id)
+      departmentList.splice(index, 1)
+      const pageList = departmentList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
           items: pageList
         }
       }
@@ -398,10 +574,10 @@ module.exports = [
     url: '/vue-element-admin/dorm/list',
     type: 'get',
     response: config => {
-      const { title, page = 1, limit = 10, sort } = config.query
-
+      const { studentName, dormName, page = 1, limit = 10, sort } = config.query
       let mockList = dormList.filter(item => {
-        if (title && item.title.indexOf(title) < 0) return false
+        if (dormName && item.dormName.indexOf(dormName) < 0) return false
+        if (studentName && item.studentName.indexOf(studentName) < 0) return false
         return true
       })
 
@@ -421,23 +597,61 @@ module.exports = [
     }
   },
   {
-    url: '/vue-element-admin/article/create',
+    url: '/vue-element-admin/dorm/create',
     type: 'post',
-    response: _ => {
+    response: config => {
+      const createData = config.body
+      dormList.unshift(createData)
+      const pageList = dormList.map((item, index) => {
+        item.id = index + 1
+      })
       return {
         code: 20000,
-        data: 'success'
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
       }
     }
   },
-
   {
-    url: '/vue-element-admin/article/update',
+    url: '/vue-element-admin/dorm/update',
     type: 'post',
-    response: _ => {
+    response: config => {
+      const updateData = config.body
+      const index = dormList.findIndex(v => v.id === updateData.id)
+      dormList[index] = updateData
+      const pageList = dormList.map((item, index) => {
+        item.id = index + 1
+      })
       return {
         code: 20000,
-        data: 'success'
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/vue-element-admin/dorm/delete',
+    type: 'post',
+    response: config => {
+      const deleteData = config.body
+      const index = dormList.findIndex(v => v.id === deleteData.id)
+      dormList.splice(index, 1)
+      const pageList = dormList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
       }
     }
   }

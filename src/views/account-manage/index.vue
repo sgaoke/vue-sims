@@ -556,7 +556,7 @@ export default {
     // 学生信息 - 编辑
     updateData() {
       const _self = this
-      this.$refs['dataForm'].validate((valid) => {
+      _self.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           console.log(tempData)
@@ -566,8 +566,8 @@ export default {
             _self.getList()
             // const index = this.list.findIndex(v => v.id === this.temp.id)
             // this.list.splice(index, 1, this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
+            _self.dialogFormVisible = false
+            _self.$notify({
               title: 'Success',
               message: 'Update Successfully',
               type: 'success',

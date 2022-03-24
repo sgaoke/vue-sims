@@ -21,10 +21,10 @@
               <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
                 新增
               </el-button>
-              <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-upload" @click="handleDownload">
+              <el-button v-waves disabled :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-upload" @click="handleDownload">
                 上传
               </el-button>
-              <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
+              <el-button v-waves disabled :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
                 下载
               </el-button>
             </el-form-item>
