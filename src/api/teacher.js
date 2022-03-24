@@ -55,6 +55,30 @@ export function fetchTotalGradeList(query) {
   })
 }
 
+export function createTGrade(data) {
+  return request({
+    url: '/vue-element-admin/tgrade/create',
+    method: 'post',
+    data
+  })
+}
+
+export function updateTGrade(data) {
+  return request({
+    url: '/vue-element-admin/tgrade/update',
+    method: 'post',
+    data
+  })
+}
+
+export function deleteTGrade(data) {
+  return request({
+    url: '/vue-element-admin/tgrade/delete',
+    method: 'post',
+    data
+  })
+}
+
 export function fetchDepartmentList(query) {
   return request({
     url: '/vue-element-admin/department/list',
@@ -92,6 +116,30 @@ export function fetchTAwardList(query) {
     url: '/vue-element-admin/taward/list',
     method: 'get',
     params: query
+  })
+}
+
+export function createTAward(data) {
+  return request({
+    url: '/vue-element-admin/taward/create',
+    method: 'post',
+    data
+  })
+}
+
+export function updateTAward(data) {
+  return request({
+    url: '/vue-element-admin/taward/update',
+    method: 'post',
+    data
+  })
+}
+
+export function deleteTAward(data) {
+  return request({
+    url: '/vue-element-admin/taward/delete',
+    method: 'post',
+    data
   })
 }
 

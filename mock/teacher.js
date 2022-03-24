@@ -385,10 +385,10 @@ module.exports = [
     url: '/vue-element-admin/tgrade/list',
     type: 'get',
     response: config => {
-      const { title, page = 1, limit = 10, sort } = config.query
-
+      const { studentNumber, studentName, page = 1, limit = 10, sort } = config.query
       let mockList = tgradeList.filter(item => {
-        if (title && item.title.indexOf(title) < 0) return false
+        if (studentNumber && ('' + item.studentNumber).indexOf(studentNumber) < 0) return false
+        if (studentName && item.studentName.indexOf(studentName) < 0) return false
         return true
       })
 
@@ -402,6 +402,65 @@ module.exports = [
         code: 20000,
         data: {
           total: mockList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/vue-element-admin/tgrade/create',
+    type: 'post',
+    response: config => {
+      const createData = config.body
+      tgradeList.unshift(createData)
+      const pageList = tgradeList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/vue-element-admin/tgrade/update',
+    type: 'post',
+    response: config => {
+      const updateData = config.body
+      const index = tgradeList.findIndex(v => v.id === updateData.id)
+      tgradeList[index] = updateData
+      const pageList = tgradeList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/vue-element-admin/tgrade/delete',
+    type: 'post',
+    response: config => {
+      const deleteData = config.body
+      const index = tgradeList.findIndex(v => v.id === deleteData.id)
+      tgradeList.splice(index, 1)
+      const pageList = tgradeList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
           items: pageList
         }
       }
