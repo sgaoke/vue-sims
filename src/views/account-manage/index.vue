@@ -25,7 +25,7 @@
           </el-col>
         </el-row>
       </el-form>
-      <el-form v-else ref="form" :model="teacherListQuery" label-width="80px">
+      <el-form v-else ref="form1" :model="teacherListQuery" label-width="80px">
         <el-row :gutter="10">
           <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
             <el-form-item label="教师工号">

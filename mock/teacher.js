@@ -102,8 +102,8 @@ for (let i = 0; i < totalGradeCount; i++) {
     courseWJ: '@integer(1, 45)',
     courseYYUE: '@integer(1, 20)',
     courseMS: '@integer(1, 20)',
-    scoreTotalScore: '@integer(500, 750)',
-    scoreTotalRank: '@integer(1, 50)',
+    totalScore: '@integer(500, 750)',
+    totalScoreRank: '@integer(1, 50)',
     'scoreReason|1': ['题目出错', '', '多个答案', ''],
     'remark|1': ['缺考', '', '', '', '', '请假', '', '', '', '']
   }))
@@ -470,10 +470,10 @@ module.exports = [
     url: '/vue-element-admin/totalgrade/list',
     type: 'get',
     response: config => {
-      const { title, page = 1, limit = 10, sort } = config.query
-
+      const { studentNumber, studentName, page = 1, limit = 10, sort } = config.query
       let mockList = totalGradeList.filter(item => {
-        if (title && item.title.indexOf(title) < 0) return false
+        if (studentNumber && ('' + item.studentNumber).indexOf(studentNumber) < 0) return false
+        if (studentName && item.studentName.indexOf(studentName) < 0) return false
         return true
       })
 
@@ -487,6 +487,65 @@ module.exports = [
         code: 20000,
         data: {
           total: mockList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/vue-element-admin/totalgrade/create',
+    type: 'post',
+    response: config => {
+      const createData = config.body
+      totalGradeList.unshift(createData)
+      const pageList = totalGradeList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/vue-element-admin/totalgrade/update',
+    type: 'post',
+    response: config => {
+      const updateData = config.body
+      const index = totalGradeList.findIndex(v => v.id === updateData.id)
+      totalGradeList[index] = updateData
+      const pageList = totalGradeList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/vue-element-admin/totalgrade/delete',
+    type: 'post',
+    response: config => {
+      const deleteData = config.body
+      const index = totalGradeList.findIndex(v => v.id === deleteData.id)
+      totalGradeList.splice(index, 1)
+      const pageList = totalGradeList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
           items: pageList
         }
       }
@@ -666,10 +725,10 @@ module.exports = [
     url: '/vue-element-admin/tpunish/list',
     type: 'get',
     response: config => {
-      const { title, page = 1, limit = 10, sort } = config.query
-
+      const { studentNumber, studentName, page = 1, limit = 10, sort } = config.query
       let mockList = punishList.filter(item => {
-        if (title && item.title.indexOf(title) < 0) return false
+        if (studentNumber && ('' + item.studentNumber).indexOf(studentNumber) < 0) return false
+        if (studentName && item.studentName.indexOf(studentName) < 0) return false
         return true
       })
 
@@ -683,6 +742,65 @@ module.exports = [
         code: 20000,
         data: {
           total: mockList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/vue-element-admin/tpunish/create',
+    type: 'post',
+    response: config => {
+      const createData = config.body
+      punishList.unshift(createData)
+      const pageList = punishList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/vue-element-admin/tpunish/update',
+    type: 'post',
+    response: config => {
+      const updateData = config.body
+      const index = punishList.findIndex(v => v.id === updateData.id)
+      punishList[index] = updateData
+      const pageList = punishList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
+          items: pageList
+        }
+      }
+    }
+  },
+  {
+    url: '/vue-element-admin/tpunish/delete',
+    type: 'post',
+    response: config => {
+      const deleteData = config.body
+      const index = punishList.findIndex(v => v.id === deleteData.id)
+      punishList.splice(index, 1)
+      const pageList = punishList.map((item, index) => {
+        item.id = index + 1
+      })
+      return {
+        code: 20000,
+        msg: 'success',
+        data: {
+          total: pageList.length,
           items: pageList
         }
       }

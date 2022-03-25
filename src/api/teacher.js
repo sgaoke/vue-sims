@@ -47,13 +47,6 @@ export function fetchTGradeList(query) {
     params: query
   })
 }
-export function fetchTotalGradeList(query) {
-  return request({
-    url: '/vue-element-admin/totalgrade/list',
-    method: 'get',
-    params: query
-  })
-}
 
 export function createTGrade(data) {
   return request({
@@ -74,6 +67,38 @@ export function updateTGrade(data) {
 export function deleteTGrade(data) {
   return request({
     url: '/vue-element-admin/tgrade/delete',
+    method: 'post',
+    data
+  })
+}
+
+export function fetchTotalGradeList(query) {
+  return request({
+    url: '/vue-element-admin/totalgrade/list',
+    method: 'get',
+    params: query
+  })
+}
+
+export function createTotalGrade(data) {
+  return request({
+    url: '/vue-element-admin/totalgrade/create',
+    method: 'post',
+    data
+  })
+}
+
+export function updateTotalGrade(data) {
+  return request({
+    url: '/vue-element-admin/totalgrade/update',
+    method: 'post',
+    data
+  })
+}
+
+export function deleteTotalGrade(data) {
+  return request({
+    url: '/vue-element-admin/totalgrade/delete',
     method: 'post',
     data
   })
@@ -148,6 +173,29 @@ export function fetchTPunishList(query) {
     url: '/vue-element-admin/tpunish/list',
     method: 'get',
     params: query
+  })
+}
+export function createTPunish(data) {
+  return request({
+    url: '/vue-element-admin/tpunish/create',
+    method: 'post',
+    data
+  })
+}
+
+export function updateTPunish(data) {
+  return request({
+    url: '/vue-element-admin/tpunish/update',
+    method: 'post',
+    data
+  })
+}
+
+export function deleteTPunish(data) {
+  return request({
+    url: '/vue-element-admin/tpunish/delete',
+    method: 'post',
+    data
   })
 }
 

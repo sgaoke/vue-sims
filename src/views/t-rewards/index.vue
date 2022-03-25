@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-form ref="form" :model="listQuery" label-width="80px">
+      <el-form v-if="activeName === 'award'" ref="form" :model="listQuery" label-width="90px">
         <el-row :gutter="10">
           <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
             <el-form-item label="学生学号">
@@ -25,8 +25,33 @@
           </el-col>
         </el-row>
       </el-form>
+      <el-form v-else ref="form1" :model="listQuery1" label-width="90px">
+        <el-row :gutter="10">
+          <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+            <el-form-item label="学生学号">
+              <el-input v-model="listQuery1.studentNumber" placeholder="请输入学生学号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter1" />
+            </el-form-item>
+          </el-col>
+          <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+            <el-form-item label="学生姓名">
+              <el-input v-model="listQuery1.studentName" placeholder="请输入学生姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter1" />
+            </el-form-item>
+          </el-col>
+          <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
+            <el-form-item style="text-align: right;">
+              <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter1">
+                查询
+              </el-button>
+              <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate1">
+                新增
+              </el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
     </div>
     <el-tabs v-model="activeName" @tab-click="handleClick">
+      <!-- 奖励信息 -->
       <el-tab-pane label="奖励信息" name="award">
         <el-table
           :key="tableKey"
@@ -128,13 +153,13 @@
           </el-table-column>
           <el-table-column label="操作" align="center" width="230" fixed class-name="small-padding fixed-width">
             <template slot-scope="{row}">
-              <el-button type="primary" size="mini" @click="handleUpdate(row)">
+              <el-button type="primary" size="mini" @click="handleView1(row)">
                 查看
               </el-button>
-              <el-button type="primary" size="mini" @click="handleUpdate(row)">
+              <el-button type="primary" size="mini" @click="handleUpdate1(row)">
                 编辑
               </el-button>
-              <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
+              <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete1(row,$index)">
                 删除
               </el-button>
             </template>
@@ -151,7 +176,7 @@
           </el-table-column>
           <el-table-column label="性别" width="120px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.gender }}</span>
+              <span>{{ row.gender | typeFilter }}</span>
             </template>
           </el-table-column>
           <el-table-column label="处分编号" width="150px" align="center">
@@ -269,6 +294,80 @@
         </el-button>
       </div>
     </el-dialog>
+    <el-dialog class="student-dialog" :title="textMap1[dialogStatus1]" :visible.sync="dialogFormVisible1">
+      <el-form
+        ref="dataForm1"
+        :rules="rules1"
+        :model="temp1"
+        label-position="left"
+        label-width="110px"
+        class="student-form scrollbar-sty"
+      >
+
+        <el-form-item v-if="dialogStatus1 !== 'view'" label="学号" prop="studentNumber">
+          <el-input v-model="temp1.studentNumber" />
+        </el-form-item>
+        <el-form-item v-else label="学号">
+          <span>{{ temp1.studentNumber }}</span>
+        </el-form-item>
+
+        <el-form-item v-if="dialogStatus1 !== 'view'" label="姓名" prop="studentName">
+          <el-input v-model="temp1.studentName" />
+        </el-form-item>
+        <el-form-item v-else label="姓名">
+          <span>{{ temp1.studentName }}</span>
+        </el-form-item>
+
+        <el-form-item label="性别">
+          <el-select
+            v-if="dialogStatus1 !== 'view'"
+            v-model="temp1.gender"
+            class="filter-item"
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in genderOptions"
+              :key="item.key"
+              :label="item.label"
+              :value="item.key"
+            />
+          </el-select>
+          <span v-else>{{ temp1.gender === 'male' ? '男' : '女' }}</span>
+        </el-form-item>
+        <el-form-item label="处分编号">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.punishNumber" />
+          <span v-else>{{ temp1.punishNumber }}</span>
+        </el-form-item>
+        <el-form-item label="处分名称">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.punishName" />
+          <span v-else>{{ temp1.punishName }}</span>
+        </el-form-item>
+        <el-form-item label="处分日期">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.punishDate" />
+          <span v-else>{{ temp1.punishDate }}</span>
+        </el-form-item>
+        <el-form-item label="违纪类别">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.disciplineCategory" />
+          <span v-else>{{ temp1.disciplineCategory }}</span>
+        </el-form-item>
+        <el-form-item label="违纪日期">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.disciplineDate" />
+          <span v-else>{{ temp1.disciplineDate }}</span>
+        </el-form-item>
+        <el-form-item label="处分解除原因">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.disciplineReason" />
+          <span v-else>{{ temp1.disciplineReason }}</span>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible1 = false">
+          取消
+        </el-button>
+        <el-button v-if="dialogStatus1 !== 'view'" type="primary" @click="dialogStatus1==='create'?createData1():updateData1()">
+          确认
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -276,7 +375,10 @@
 import { fetchTAwardList, fetchTPunishList,
   createTAward,
   updateTAward,
-  deleteTAward
+  deleteTAward,
+  createTPunish,
+  updateTPunish,
+  deleteTPunish
 } from '@/api/teacher'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -339,6 +441,18 @@ export default {
         awardBonus: '',
         awardTime: ''
       },
+      temp1: {
+        id: undefined,
+        studentNumber: '',
+        studentName: '',
+        gender: '',
+        punishNumber: '',
+        punishName: '',
+        punishDate: '',
+        disciplineCategory: '',
+        disciplineDate: '',
+        disciplineReason: ''
+      },
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -350,7 +464,17 @@ export default {
         studentNumber: [{ required: true, message: '学号是必填项', trigger: 'blur' }],
         studentName: [{ required: true, message: '姓名是必填项', trigger: 'blur' }]
       },
-      downloadLoading: false,
+      dialogFormVisible1: false,
+      dialogStatus1: '',
+      textMap1: {
+        update: '编辑',
+        create: '新增',
+        view: '查看奖励信息'
+      },
+      rules1: {
+        studentNumber: [{ required: true, message: '学号是必填项', trigger: 'blur' }],
+        studentName: [{ required: true, message: '姓名是必填项', trigger: 'blur' }]
+      },
       activeName: 'award'
     }
   },
@@ -388,15 +512,8 @@ export default {
       this.getList()
     },
     handleFilter1() {
-      this.listQuery.page = 1
+      this.listQuery1.page = 1
       this.getList1()
-    },
-    handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作Success',
-        type: 'success'
-      })
-      row.status = status
     },
     sortChange(data) {
       const { prop, order } = data
@@ -420,9 +537,9 @@ export default {
     },
     sortByID1(order) {
       if (order === 'ascending') {
-        this.listQuery.sort = '+id'
+        this.listQuery1.sort = '+id'
       } else {
-        this.listQuery.sort = '-id'
+        this.listQuery1.sort = '-id'
       }
       this.handleFilter1()
     },
@@ -441,12 +558,34 @@ export default {
         awardTime: ''
       }
     },
+    resetTemp1() {
+      this.temp1 = {
+        id: undefined,
+        studentNumber: '',
+        studentName: '',
+        gender: '',
+        punishNumber: '',
+        punishName: '',
+        punishDate: '',
+        disciplineCategory: '',
+        disciplineDate: '',
+        disciplineReason: ''
+      }
+    },
     handleCreate() {
       this.resetTemp()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
+      })
+    },
+    handleCreate1() {
+      this.resetTemp1()
+      this.dialogStatus1 = 'create'
+      this.dialogFormVisible1 = true
+      this.$nextTick(() => {
+        this.$refs['dataForm1'].clearValidate()
       })
     },
     createData() {
@@ -468,6 +607,25 @@ export default {
         }
       })
     },
+    createData1() {
+      this.$refs['dataForm1'].validate((valid) => {
+        if (valid) {
+          // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+          this.temp.author = 'songgaoke'
+          createTPunish(this.temp1).then(() => {
+            // this.list.unshift(this.temp)
+            this.getList1()
+            this.dialogFormVisible1 = false
+            this.$notify({
+              title: 'Success',
+              message: 'Created Successfully',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        }
+      })
+    },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)
@@ -475,6 +633,15 @@ export default {
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
+      })
+    },
+    handleUpdate1(row) {
+      this.temp1 = Object.assign({}, row) // copy obj
+      // this.temp.timestamp = new Date(this.temp.timestamp)
+      this.dialogStatus1 = 'update'
+      this.dialogFormVisible1 = true
+      this.$nextTick(() => {
+        this.$refs['dataForm1'].clearValidate()
       })
     },
     updateData() {
@@ -487,6 +654,26 @@ export default {
             // this.list.splice(index, 1, this.temp)
             this.getList()
             this.dialogFormVisible = false
+            this.$notify({
+              title: 'Success',
+              message: 'Update Successfully',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        }
+      })
+    },
+    updateData1() {
+      this.$refs['dataForm1'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.temp1)
+          // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+          updateTPunish(tempData).then(() => {
+            // const index = this.list.findIndex(v => v.id === this.temp.id)
+            // this.list.splice(index, 1, this.temp)
+            this.getList1()
+            this.dialogFormVisible1 = false
             this.$notify({
               title: 'Success',
               message: 'Update Successfully',
@@ -519,18 +706,26 @@ export default {
         })
       })
     },
-    handleDownload() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-        const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
-        const data = this.formatJson(filterVal)
-        excel.export_json_to_excel({
-          header: tHeader,
-          data,
-          filename: 'table-list'
+    handleDelete1(row, index) {
+      var _self = this
+      _self.$confirm('请确认是否删除当前记录?', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+        cancelButtonClass: 'cancelButton'
+      }).then(() => {
+        const deleteData = Object.assign({}, row)
+
+        deleteTPunish(deleteData).then((res) => {
+          console.log(res)
+          _self.getList1()
+          _self.$notify({
+            title: 'Success',
+            message: 'Delete Successfully',
+            type: 'success',
+            duration: 2000
+          })
         })
-        this.downloadLoading = false
       })
     },
     formatJson(filterVal) {
@@ -547,17 +742,23 @@ export default {
       return sort === `+${key}` ? 'ascending' : 'descending'
     },
     getSortClass1: function(key) {
-      const sort = this.listQuery.sort
+      const sort = this.listQuery1.sort
       return sort === `+${key}` ? 'ascending' : 'descending'
     },
-    handleClick() {
-      console.log('切换Tab')
+    handleClick(tab, event) {
+      console.log(tab, event)
     },
     handleView(row) {
       // console.log(row)
       this.temp = Object.assign({}, row)
       this.dialogStatus = 'view'
       this.dialogFormVisible = true
+    },
+    handleView1(row) {
+      // console.log(row)
+      this.temp1 = Object.assign({}, row)
+      this.dialogStatus1 = 'view'
+      this.dialogFormVisible1 = true
     }
   }
 }

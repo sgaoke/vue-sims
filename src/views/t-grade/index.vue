@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-form ref="form" :model="listQuery" label-width="80px">
+      <el-form v-if="activeName === 'subjectScore'" ref="form" :model="listQuery" label-width="80px">
         <el-row :gutter="10">
           <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6">
             <el-form-item label="学生学号">
@@ -21,10 +21,41 @@
               <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
                 新增
               </el-button>
-              <el-button v-waves disabled :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-upload" @click="handleDownload">
+              <el-button v-waves disabled :loading="uploadLoading" class="filter-item" type="primary" icon="el-icon-upload" @click="handleUpload">
                 上传
               </el-button>
               <el-button v-waves disabled :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
+                下载
+              </el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+
+      <el-form v-else ref="form1" :model="listQuery1" label-width="80px">
+        <el-row :gutter="10">
+          <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6">
+            <el-form-item label="学生学号">
+              <el-input v-model="listQuery1.studentNumber" placeholder="请输入学生学号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter1" />
+            </el-form-item>
+          </el-col>
+          <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6">
+            <el-form-item label="学生姓名">
+              <el-input v-model="listQuery1.studentName" placeholder="请输入学生姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter1" />
+            </el-form-item>
+          </el-col>
+          <el-col :xs="12" :sm="12" :md="12" :lg="12" :xl="12">
+            <el-form-item style="text-align: right;">
+              <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter1">
+                查询
+              </el-button>
+              <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate1">
+                新增
+              </el-button>
+              <el-button v-waves disabled :loading="uploadLoading1" class="filter-item" type="primary" icon="el-icon-upload" @click="handleUpload1">
+                上传
+              </el-button>
+              <el-button v-waves disabled :loading="downloadLoading1" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload1">
                 下载
               </el-button>
             </el-form-item>
@@ -134,20 +165,20 @@
           style="width: 100%;"
           @sort-change="sortChange1"
         >
-          <el-table-column label="序号" prop="id" sortable="custom" fixed align="center" width="80" :class-name="getSortClass('id')">
+          <el-table-column label="序号" prop="id" sortable="custom" fixed align="center" width="80" :class-name="getSortClass1('id')">
             <template slot-scope="{row}">
               <span>{{ row.id }}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" width="230" fixed class-name="small-padding fixed-width">
             <template slot-scope="{row}">
-              <el-button type="primary" size="mini" @click="handleUpdate(row)">
+              <el-button type="primary" size="mini" @click="handleView1(row)">
                 查看
               </el-button>
-              <el-button type="primary" size="mini" @click="handleUpdate(row)">
+              <el-button type="primary" size="mini" @click="handleUpdate1(row)">
                 编辑
               </el-button>
-              <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">
+              <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete1(row,$index)">
                 删除
               </el-button>
             </template>
@@ -254,12 +285,12 @@
           </el-table-column>
           <el-table-column label="总成绩" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.scoreTotalScore }}</span>
+              <span>{{ row.totalScore }}</span>
             </template>
           </el-table-column>
           <el-table-column label="总成绩排名" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.scoreTotalRank }}</span>
+              <span>{{ row.totalScoreRank }}</span>
             </template>
           </el-table-column>
           <el-table-column label="成绩修改原因" width="150px" align="center">
@@ -269,7 +300,7 @@
           </el-table-column>
           <el-table-column label="备注" width="150px" align="center">
             <template slot-scope="{row}">
-              <span>{{ row.scoreRank }}</span>
+              <span>{{ row.remark }}</span>
             </template>
           </el-table-column>
         </el-table>
@@ -358,11 +389,144 @@
         </el-button>
       </div>
     </el-dialog>
+
+    <el-dialog class="total-dialog" :title="textMap1[dialogStatus1]" :visible.sync="dialogFormVisible1">
+      <el-form
+        ref="dataForm1"
+        :rules="rules1"
+        :model="temp1"
+        label-position="left"
+        label-width="110px"
+        class="student-form scrollbar-sty"
+      >
+        <el-form-item v-if="dialogStatus1 !== 'view'" label="班级名称" prop="className">
+          <el-input v-model="temp1.className" />
+        </el-form-item>
+        <el-form-item v-else label="班级名称">
+          <span>{{ temp1.studentNumber }}</span>
+        </el-form-item>
+
+        <el-form-item v-if="dialogStatus1 !== 'view'" label="学号" prop="studentNumber">
+          <el-input v-model="temp1.studentNumber" />
+        </el-form-item>
+        <el-form-item v-else label="学号">
+          <span>{{ temp1.studentNumber }}</span>
+        </el-form-item>
+
+        <el-form-item v-if="dialogStatus1 !== 'view'" label="姓名" prop="studentName">
+          <el-input v-model="temp1.studentName" />
+        </el-form-item>
+        <el-form-item v-else label="姓名">
+          <span>{{ temp1.studentName }}</span>
+        </el-form-item>
+
+        <el-form-item label="语文">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.courseYW" />
+          <span v-else>{{ temp1.courseYW }}</span>
+        </el-form-item>
+        <el-form-item label="数学">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.courseSX" />
+          <span v-else>{{ temp1.courseSX }}</span>
+        </el-form-item>
+        <el-form-item label="英语">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.courseYY" />
+          <span v-else>{{ temp1.courseYY }}</span>
+        </el-form-item>
+        <el-form-item label="政治">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.courseZZ" />
+          <span v-else>{{ temp1.courseZZ }}</span>
+        </el-form-item>
+        <el-form-item label="生物（操作）">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.courseSWCZ" />
+          <span v-else>{{ temp1.courseSWCZ }}</span>
+        </el-form-item>
+        <el-form-item label="生物">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.courseSW" />
+          <span v-else>{{ temp1.courseSW }}</span>
+        </el-form-item>
+        <el-form-item label="物理（操作）">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.courseWLCZ" />
+          <span v-else>{{ temp1.courseWLCZ }}</span>
+        </el-form-item>
+        <el-form-item label="物理">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.courseWL" />
+          <span v-else>{{ temp1.courseWL }}</span>
+        </el-form-item>
+        <el-form-item label="化学（操作）">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.courseHXCZ" />
+          <span v-else>{{ temp1.courseHXCZ }}</span>
+        </el-form-item>
+        <el-form-item label="化学">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.courseHX" />
+          <span v-else>{{ temp1.courseHX }}</span>
+        </el-form-item>
+        <el-form-item label="地理（户外考察）">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.courseDLHWKC" />
+          <span v-else>{{ temp1.courseDLHWKC }}</span>
+        </el-form-item>
+        <el-form-item label="地理">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.courseDL" />
+          <span v-else>{{ temp1.courseDL }}</span>
+        </el-form-item>
+        <el-form-item label="体育">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.courseTY" />
+          <span v-else>{{ temp1.courseTY }}</span>
+        </el-form-item>
+        <el-form-item label="微机实验课">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.courseWJSYK" />
+          <span v-else>{{ temp1.courseWJSYK }}</span>
+        </el-form-item>
+        <el-form-item label="微机">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.courseWJ" />
+          <span v-else>{{ temp1.courseWJ }}</span>
+        </el-form-item>
+        <el-form-item label="音乐">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.courseYYUE" />
+          <span v-else>{{ temp1.courseYYUE }}</span>
+        </el-form-item>
+        <el-form-item label="美术">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.courseMS" />
+          <span v-else>{{ temp1.courseMS }}</span>
+        </el-form-item>
+
+        <el-form-item label="总成绩">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.totalScore" />
+          <span v-else>{{ temp1.totalScore }}</span>
+        </el-form-item>
+        <el-form-item label="总成绩排名">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.totalScoreRank" />
+          <span v-else>{{ temp1.totalScoreRank }}</span>
+        </el-form-item>
+        <el-form-item label="成绩修改原因">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.scoreReason" />
+          <span v-else>{{ temp1.scoreReason }}</span>
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input v-if="dialogStatus1 !== 'view'" v-model="temp1.remark" />
+          <span v-else>{{ temp1.remark }}</span>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible1 = false">
+          取消
+        </el-button>
+        <el-button v-if="dialogStatus1 !== 'view'" type="primary" @click="dialogStatus1==='create'?createData1():updateData1()">
+          确认
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchTGradeList, fetchTotalGradeList, createTGrade, updateTGrade, deleteTGrade } from '@/api/teacher'
+import { fetchTGradeList, fetchTotalGradeList,
+  createTGrade,
+  updateTGrade,
+  deleteTGrade,
+  createTotalGrade,
+  updateTotalGrade,
+  deleteTotalGrade
+} from '@/api/teacher'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -410,6 +574,33 @@ export default {
         scoreReason: '',
         remark: ''
       },
+      temp1: {
+        id: undefined,
+        className: '',
+        studentNumber: '',
+        studentName: '',
+        courseYW: '',
+        courseSX: '',
+        courseYY: '',
+        courseZZ: '',
+        courseSWCZ: '',
+        courseSW: '',
+        courseWLCZ: '',
+        courseWL: '',
+        courseHXCZ: '',
+        courseHX: '',
+        courseDL: '',
+        courseDLHWKC: '',
+        courseTY: '',
+        courseWJSYK: '',
+        courseWJ: '',
+        courseYYUE: '',
+        courseMS: '',
+        totalScore: '',
+        totalScoreRank: '',
+        scoreReason: '',
+        remark: ''
+      },
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -423,7 +614,20 @@ export default {
         studentName: [{ required: true, message: '姓名是必填项', trigger: 'blur' }],
         courseName: [{ required: true, message: '课程名称是必填项', trigger: 'blur' }]
       },
-      downloadLoading: false
+      dialogFormVisible1: false,
+      dialogStatus1: '',
+      textMap1: {
+        update: '编辑',
+        create: '新增',
+        view: '查看总成绩信息'
+      },
+      rules1: {
+        className: [{ required: true, message: '班级名称是必填项', trigger: 'blur' }],
+        studentNumber: [{ required: true, message: '学号是必填项', trigger: 'blur' }],
+        studentName: [{ required: true, message: '姓名是必填项', trigger: 'blur' }]
+      },
+      downloadLoading: false,
+      downloadLoading1: false
     }
   },
   created() {
@@ -464,13 +668,6 @@ export default {
     handleFilter1() {
       this.listQuery1.page = 1
       this.getList1()
-    },
-    handleModifyStatus(row, status) {
-      this.$message({
-        message: '操作Success',
-        type: 'success'
-      })
-      row.status = status
     },
     sortChange(data) {
       const { prop, order } = data
@@ -516,12 +713,49 @@ export default {
         remark: ''
       }
     },
+    resetTemp1() {
+      this.temp1 = {
+        id: undefined,
+        className: '',
+        studentNumber: '',
+        studentName: '',
+        courseYW: '',
+        courseSX: '',
+        courseYY: '',
+        courseZZ: '',
+        courseSWCZ: '',
+        courseSW: '',
+        courseWLCZ: '',
+        courseWL: '',
+        courseHXCZ: '',
+        courseHX: '',
+        courseDL: '',
+        courseDLHWKC: '',
+        courseTY: '',
+        courseWJSYK: '',
+        courseWJ: '',
+        courseYYUE: '',
+        courseMS: '',
+        totalScore: '',
+        totalScoreRank: '',
+        scoreReason: '',
+        remark: ''
+      }
+    },
     handleCreate() {
       this.resetTemp()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
+      })
+    },
+    handleCreate1() {
+      this.resetTemp1()
+      this.dialogStatus1 = 'create'
+      this.dialogFormVisible1 = true
+      this.$nextTick(() => {
+        this.$refs['dataForm1'].clearValidate()
       })
     },
     createData() {
@@ -543,6 +777,25 @@ export default {
         }
       })
     },
+    createData1() {
+      this.$refs['dataForm1'].validate((valid) => {
+        if (valid) {
+          // this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+          this.temp1.author = 'songgaoke'
+          createTotalGrade(this.temp1).then(() => {
+            // this.list.unshift(this.temp)
+            this.getList1()
+            this.dialogFormVisible1 = false
+            this.$notify({
+              title: 'Success',
+              message: 'Created Successfully',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        }
+      })
+    },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)
@@ -550,6 +803,15 @@ export default {
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
+      })
+    },
+    handleUpdate1(row) {
+      this.temp1 = Object.assign({}, row) // copy obj
+      // this.temp.timestamp = new Date(this.temp.timestamp)
+      this.dialogStatus1 = 'update'
+      this.dialogFormVisible1 = true
+      this.$nextTick(() => {
+        this.$refs['dataForm1'].clearValidate()
       })
     },
     updateData() {
@@ -562,6 +824,26 @@ export default {
             // this.list.splice(index, 1, this.temp)
             this.getList()
             this.dialogFormVisible = false
+            this.$notify({
+              title: 'Success',
+              message: 'Update Successfully',
+              type: 'success',
+              duration: 2000
+            })
+          })
+        }
+      })
+    },
+    updateData1() {
+      this.$refs['dataForm1'].validate((valid) => {
+        if (valid) {
+          const tempData = Object.assign({}, this.temp1)
+          // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+          updateTotalGrade(tempData).then(() => {
+            // const index = this.list.findIndex(v => v.id === this.temp.id)
+            // this.list.splice(index, 1, this.temp)
+            this.getList1()
+            this.dialogFormVisible1 = false
             this.$notify({
               title: 'Success',
               message: 'Update Successfully',
@@ -585,6 +867,28 @@ export default {
         deleteTGrade(deleteData).then((res) => {
           console.log(res)
           _self.getList()
+          _self.$notify({
+            title: 'Success',
+            message: 'Delete Successfully',
+            type: 'success',
+            duration: 2000
+          })
+        })
+      })
+    },
+    handleDelete1(row, index) {
+      var _self = this
+      _self.$confirm('请确认是否删除当前记录?', {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+        cancelButtonClass: 'cancelButton'
+      }).then(() => {
+        const deleteData = Object.assign({}, row)
+
+        deleteTotalGrade(deleteData).then((res) => {
+          console.log(res)
+          _self.getList1()
           _self.$notify({
             title: 'Success',
             message: 'Delete Successfully',
@@ -621,10 +925,16 @@ export default {
       const sort = this.listQuery.sort
       return sort === `+${key}` ? 'ascending' : 'descending'
     },
-    handleClick() {
-      console.log('activename')
+    handleClick(tab, event) {
+      console.log(tab, event)
     },
     handleView(row) {
+      // console.log(row)
+      this.temp = Object.assign({}, row)
+      this.dialogStatus = 'view'
+      this.dialogFormVisible = true
+    },
+    handleView1(row) {
       // console.log(row)
       this.temp = Object.assign({}, row)
       this.dialogStatus = 'view'
@@ -640,7 +950,7 @@ export default {
       margin-bottom: 0;
   }
 }
-.student-dialog {
+.student-dialog, .total-dialog{
   .el-form-item {
       margin-bottom: 22px;
   }
