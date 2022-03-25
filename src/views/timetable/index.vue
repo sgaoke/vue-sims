@@ -73,7 +73,7 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
+    <el-dialog v-if="dialogFormVisible" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form ref="dataForm" :model="temp" label-position="left" label-width="90px" style="margin-left:50px;">
         <el-form-item label="课程编号">
           <span>{{ temp.courseNumber }}</span>

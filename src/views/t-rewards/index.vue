@@ -216,7 +216,7 @@
       </el-tab-pane>
     </el-tabs>
 
-    <el-dialog class="student-dialog" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog v-if="dialogFormVisible" class="student-dialog" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form
         ref="dataForm"
         :rules="rules"
@@ -294,7 +294,7 @@
         </el-button>
       </div>
     </el-dialog>
-    <el-dialog class="student-dialog" :title="textMap1[dialogStatus1]" :visible.sync="dialogFormVisible1">
+    <el-dialog v-if="dialogFormVisible1" class="student-dialog" :title="textMap1[dialogStatus1]" :visible.sync="dialogFormVisible1">
       <el-form
         ref="dataForm1"
         :rules="rules1"

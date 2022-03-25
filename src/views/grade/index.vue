@@ -99,7 +99,7 @@
       />
     </div>
     <!-- View Dialog -->
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
+    <el-dialog v-if="dialogFormVisible" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form ref="dataForm" :model="temp" label-position="left" label-width="90px" style="margin-left:50px;">
         <el-form-item label="课程名称">
           <span>{{ temp.course }}</span>

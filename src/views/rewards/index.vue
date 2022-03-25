@@ -119,7 +119,7 @@
     </el-tabs>
 
     <!-- 处分信息弹窗 -->
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
+    <el-dialog v-if="dialogFormVisible" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="600px">
       <el-form ref="dataForm" :model="temp" label-position="left" label-width="110px" style="margin-left:50px;">
         <el-form-item label="处分编号">
           <span>{{ temp.punishNumber }}</span>
@@ -148,7 +148,7 @@
     </el-dialog>
 
     <!-- 奖励信息弹窗 -->
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible1" width="600px">
+    <el-dialog v-if="dialogFormVisible1" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible1" width="600px">
       <el-form ref="dataForm" :model="temp1" label-position="left" label-width="110px" style="margin-left:50px;">
         <el-form-item label="奖励编号">
           <span>{{ temp1.awardNumber }}</span>

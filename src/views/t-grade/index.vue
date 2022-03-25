@@ -310,7 +310,7 @@
       </el-tab-pane>
     </el-tabs>
 
-    <el-dialog class="student-dialog" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog v-if="dialogFormVisible" class="student-dialog" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form
         ref="dataForm"
         :rules="rules"
@@ -390,7 +390,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog class="total-dialog" :title="textMap1[dialogStatus1]" :visible.sync="dialogFormVisible1">
+    <el-dialog v-if="dialogFormVisible1" class="total-dialog" :title="textMap1[dialogStatus1]" :visible.sync="dialogFormVisible1">
       <el-form
         ref="dataForm1"
         :rules="rules1"
@@ -923,6 +923,10 @@ export default {
     },
     getSortClass: function(key) {
       const sort = this.listQuery.sort
+      return sort === `+${key}` ? 'ascending' : 'descending'
+    },
+    getSortClass1: function(key) {
+      const sort = this.listQuery1.sort
       return sort === `+${key}` ? 'ascending' : 'descending'
     },
     handleClick(tab, event) {

@@ -171,7 +171,7 @@
     </el-tabs>
 
     <!-- student -->
-    <el-dialog class="student-dialog" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog v-if="dialogFormVisible" class="student-dialog" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
         <el-form-item v-if="dialogStatus !== 'view'" label="学号" prop="studentNumber">
           <el-input v-model="temp.studentNumber" />
@@ -223,7 +223,7 @@
     </el-dialog>
 
     <!-- teacher -->
-    <el-dialog class="teacher-dialog" :title="textMap1[dialogStatus1]" :visible.sync="dialogFormVisible1">
+    <el-dialog v-if="dialogFormVisible1" class="teacher-dialog" :title="textMap1[dialogStatus1]" :visible.sync="dialogFormVisible1">
       <el-form ref="dataForm1" :rules="rules1" :model="temp1" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
         <el-form-item v-if="dialogStatus1 !== 'view'" label="工号" prop="teacherNumber">
           <el-input v-model="temp1.teacherNumber" />

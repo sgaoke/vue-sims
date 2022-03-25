@@ -83,7 +83,7 @@
                 placeholder="Username"
                 name="username"
                 type="text"
-                tabindex="1"
+                tabindex="3"
                 auto-complete="on"
               />
             </el-form-item>
@@ -98,7 +98,7 @@
                 placeholder="Email"
                 name="email"
                 type="text"
-                tabindex="2"
+                tabindex="4"
                 auto-complete="on"
               />
             </el-form-item>
@@ -114,7 +114,7 @@
                 :type="passwordType"
                 placeholder="Password"
                 name="password"
-                tabindex="3"
+                tabindex="5"
                 auto-complete="on"
                 @keyup.enter.native="handleSignup"
               />
