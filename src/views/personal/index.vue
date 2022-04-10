@@ -18,9 +18,9 @@
         <el-row :gutter="10">
           <el-col :xs="8" :sm="8" :md="8" :lg="8" :xl="8">
             <div class="grid-content">
-              <el-form-item label="学号" prop="number">
-                <el-input v-if="isEdit" v-model="ruleForm.number" />
-                <span v-else>{{ ruleForm.number }}</span>
+              <el-form-item label="学号" prop="snumber">
+                <el-input v-if="isEdit" v-model="ruleForm.snumber" />
+                <span v-else>{{ ruleForm.snumber }}</span>
               </el-form-item>
             </div>
           </el-col>
@@ -142,7 +142,7 @@ export default {
     return {
       isEdit: false,
       ruleForm: {
-        number: '',
+        snumber: '',
         name: '',
         gender: '',
         cType: '',
@@ -156,7 +156,7 @@ export default {
         grade: ''
       },
       rules: {
-        number: [
+        snumber: [
           { required: false, message: '请输入学号', trigger: 'blur' }
         ],
         name: [
@@ -170,7 +170,7 @@ export default {
       query: {
         page: 1,
         limit: 10,
-        number: '2018051613005'
+        snumber: '2018051613005'
       }
     }
   },
@@ -181,9 +181,9 @@ export default {
     getPersonInfo() {
       // console.log(this.listQuery)
       // this.listLoading = true
-      console.log(this.query)
+      console.log('-------------------->query', this.query)
       fetchPersonInfo(this.query).then(response => {
-        // console.log(response.data.items[0])
+        console.log('------------------->response', response.data.items[0])
         this.ruleForm = response.data.items[0]
 
         // Just to simulate the time of the request

@@ -1,7 +1,7 @@
 const Mock = require('mockjs')
 
 const personInfoList = []
-const personCount = 3
+const personCount = 1
 
 const gradeList = []
 const gradeCount = 20
@@ -23,7 +23,7 @@ Mock.Random.extend({
 
 for (let i = 0; i < personCount; i++) {
   personInfoList.push(Mock.mock({
-    'number|1': ['2018051613004', '2018051613005', '2018051613006'],
+    'snumber': '2018051613005',
     name: '@cname',
     'gender|1': ['男', '女'],
     'cType|1': ['居民身份证', '护照'],
@@ -127,11 +127,11 @@ module.exports = [
     url: '/vue-element-admin/person/info',
     type: 'get',
     response: config => {
-      const { number, page = 1, limit = 10 } = config.query
-      // console.log(number)
-      console.log(personInfoList)
+      const { snumber, page = 1, limit = 10 } = config.query
+      // console.log('--------->snumber', snumber)
+      // console.log(personInfoList)
       const mockList = personInfoList.filter(item => {
-        if (number && ('' + item.number).indexOf(number) < 0) return false
+        if (snumber && ('' + item.snumber).indexOf(snumber) < 0) return false
         return true
       })
 
@@ -151,7 +151,7 @@ module.exports = [
     type: 'post',
     response: config => {
       const updateData = config.body
-      console.log(personInfoList)
+      // console.log(personInfoList)
       const index = personInfoList.findIndex(v => v.number === updateData.number)
       personInfoList[index] = updateData
 

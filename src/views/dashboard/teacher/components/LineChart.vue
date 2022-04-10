@@ -20,7 +20,7 @@ export default {
     },
     height: {
       type: String,
-      default: '550px'
+      default: '350px'
     },
     autoResize: {
       type: Boolean,
@@ -63,12 +63,8 @@ export default {
     },
     setOptions({ expectedData, actualData } = {}) {
       this.chart.setOption({
-        title: {
-          left: 'center',
-          text: '登录人数统计'
-        },
         xAxis: {
-          data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
           boundaryGap: false,
           axisTick: {
             show: false
@@ -76,9 +72,9 @@ export default {
         },
         grid: {
           left: 10,
-          right: 20,
-          bottom: 50,
-          top: 50,
+          right: 10,
+          bottom: 20,
+          top: 30,
           containLabel: true
         },
         tooltip: {
@@ -89,18 +85,15 @@ export default {
           padding: [5, 10]
         },
         yAxis: {
-          name: '人数',
           axisTick: {
             show: false
           }
         },
         legend: {
-          data: ['教师', '学生'],
-          left: 'center',
-          bottom: '10'
+          data: ['expected', 'actual']
         },
         series: [{
-          name: '教师', itemStyle: {
+          name: 'expected', itemStyle: {
             normal: {
               color: '#FF005A',
               lineStyle: {
@@ -116,7 +109,7 @@ export default {
           animationEasing: 'cubicInOut'
         },
         {
-          name: '学生',
+          name: 'actual',
           smooth: true,
           type: 'line',
           itemStyle: {
