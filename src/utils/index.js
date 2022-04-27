@@ -363,9 +363,11 @@ export function removeClass(ele, cls) {
  * @param {string} role
  */
 export function isHasPermission(roles) {
+  console.log('---------------->roles', roles)
   const tokenData = store.getters.token
+  console.log(tokenData)
   const tokenArr = tokenData.split('-')
-  // console.log(tokenArr)
+  console.log(tokenArr)
 
   if (roles && roles instanceof Array) {
     for (const role of roles) {
