@@ -24,7 +24,7 @@
               <el-button v-waves disabled :loading="uploadLoading" class="filter-item" type="primary" icon="el-icon-upload" @click="handleUpload">
                 上传
               </el-button>
-              <el-button v-waves disabled :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
+              <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
                 下载
               </el-button>
             </el-form-item>
@@ -55,7 +55,7 @@
               <el-button v-waves disabled :loading="uploadLoading1" class="filter-item" type="primary" icon="el-icon-upload" @click="handleUpload1">
                 上传
               </el-button>
-              <el-button v-waves disabled :loading="downloadLoading1" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload1">
+              <el-button v-waves :loading="downloadLoading1" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload1">
                 下载
               </el-button>
             </el-form-item>
@@ -540,6 +540,7 @@ export default {
       activeName: 'subjectScore',
       tableKey: 0,
       list: null,
+      allList: null,
       total: 0,
       listLoading: true,
       listQuery: {
@@ -551,6 +552,7 @@ export default {
       },
       tableKey1: 0,
       list1: null,
+      allList1: null,
       total1: 0,
       listLoading1: true,
       listQuery1: {
@@ -632,7 +634,9 @@ export default {
   },
   created() {
     this.getList()
+    this.getAllList()
     this.getList1()
+    this.getAllList1()
   },
   methods: {
     getList() {
@@ -648,6 +652,14 @@ export default {
         }, 1.5 * 1000)
       })
     },
+    getAllList() {
+      fetchTGradeList({
+        page: 1,
+        limit: 10000
+      }).then(response => {
+        this.allList = response.data.items
+      })
+    },
     getList1() {
       console.log(this.listQuery1)
       this.listLoading1 = true
@@ -659,6 +671,14 @@ export default {
         setTimeout(() => {
           this.listLoading1 = false
         }, 1.5 * 1000)
+      })
+    },
+    getAllList1() {
+      fetchTotalGradeList({
+        page: 1,
+        limit: 10000
+      }).then(response => {
+        this.allList1 = response.data.items
       })
     },
     handleFilter() {
@@ -901,19 +921,86 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-        const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
+        const tHeader = ['班级名称', '学生学号', '学生姓名', '课程名称', '课程分数', '授课教师', '考试时间', '考试成绩', '单科成绩排名', '成绩修改原因', '备注']
+        const filterVal = [
+          'className',
+          'studentNumber',
+          'studentName',
+          'courseName',
+          'courseScore',
+          'teacher',
+          'examTime',
+          'examScore',
+          'scoreRank',
+          'scoreReason',
+          'remark'
+        ]
         const data = this.formatJson(filterVal)
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: 'table-list'
+          filename: '单科成绩信息表'
         })
         this.downloadLoading = false
       })
     },
+    handleDownload1() {
+      this.downloadLoading1 = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['班级名称', '学生学号', '学生姓名',
+          '语文', '数学', '英语', '政治',
+          '生物（操作）', '生物', '物理（操作）', '物理',
+          '化学（操作）', '化学', '地理',
+          '地理（户外考察）', '体育', '微机实验课',
+          '微机', '音乐', '美术',
+          '总成绩', '总成绩排名', '成绩修改原因', '备注']
+
+        const filterVal = [
+          'className',
+          'studentNumber',
+          'studentName',
+          'courseYW',
+          'courseSX',
+          'courseYY',
+          'courseZZ',
+          'courseSWCZ',
+          'courseSW',
+          'courseWLCZ',
+          'courseWL',
+          'courseHXCZ',
+          'courseHX',
+          'courseDL',
+          'courseDLHWKC',
+          'courseTY',
+          'courseWJSYK',
+          'courseWJ',
+          'courseYYUE',
+          'courseMS',
+          'totalScore',
+          'totalScoreRank',
+          'scoreReason',
+          'remark'
+        ]
+        const data = this.formatJson1(filterVal)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: '总成绩信息表'
+        })
+        this.downloadLoading1 = false
+      })
+    },
     formatJson(filterVal) {
-      return this.list.map(v => filterVal.map(j => {
+      return this.allList.map(v => filterVal.map(j => {
+        if (j === 'timestamp') {
+          return parseTime(v[j])
+        } else {
+          return v[j]
+        }
+      }))
+    },
+    formatJson1(filterVal) {
+      return this.allList1.map(v => filterVal.map(j => {
         if (j === 'timestamp') {
           return parseTime(v[j])
         } else {

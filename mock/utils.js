@@ -42,7 +42,31 @@ function deepClone(source) {
   return targetObj
 }
 
+// 设置缓存
+function sessionSet(name, data) {
+  sessionStorage.removeItem(name)
+  sessionStorage.setItem(name, JSON.stringify(data))
+}
+// 获取缓存
+function sessionGet(name) {
+  // console.log(name)
+  let returnName = ''
+  try {
+    returnName = JSON.parse(sessionStorage.getItem(name))// 捕获JSON.parse异常
+  } catch (e) {
+    returnName = ''
+  }
+  return returnName
+}
+// 清除缓存
+function sessionRemove(name) {
+  sessionStorage.removeItem(name)
+}
+
 module.exports = {
   param2Obj,
-  deepClone
+  deepClone,
+  sessionSet,
+  sessionGet,
+  sessionRemove
 }

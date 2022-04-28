@@ -24,7 +24,7 @@
               <el-button v-waves disabled :loading="uploadLoading" class="filter-item" type="primary" icon="el-icon-upload" @click="handleUpload">
                 上传
               </el-button>
-              <el-button v-waves disabled :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
+              <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
                 下载
               </el-button>
             </el-form-item>
@@ -246,6 +246,7 @@ export default {
     return {
       tableKey: 0,
       list: null,
+      allList: null,
       total: 0,
       listLoading: true,
       listQuery: {
@@ -288,6 +289,7 @@ export default {
   },
   created() {
     this.getList()
+    this.getAllList()
   },
   methods: {
     getList() {
@@ -300,6 +302,15 @@ export default {
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
+      })
+    },
+    getAllList() {
+      fetchStudentList({
+        page: 1,
+        limit: 10000
+      }).then(response => {
+        console.log(response)
+        this.allList = response.data.items
       })
     },
     handleFilter() {
@@ -431,19 +442,33 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-        const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
+        const tHeader = ['学号', '姓名', '性别', '证件类型', '证件号码', '出生日期', '民族', '政治面貌', '家庭地址', '联系方式', '是否住校', '年级']
+        const filterVal = [
+          'studentNumber',
+          'studentName',
+          'gender',
+          'idType',
+          'idNumber',
+          'birthDate',
+          'nation',
+          'politicsStatus',
+          'address',
+          'contact',
+          'isResidence',
+          'class'
+        ]
         const data = this.formatJson(filterVal)
+        console.log(data)
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: 'table-list'
+          filename: '学生信息表'
         })
         this.downloadLoading = false
       })
     },
     formatJson(filterVal) {
-      return this.list.map(v => filterVal.map(j => {
+      return this.allList.map(v => filterVal.map(j => {
         if (j === 'timestamp') {
           return parseTime(v[j])
         } else {

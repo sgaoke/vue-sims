@@ -1,7 +1,7 @@
 /**
  * Created by SongGaoke on 16/11/18.
  */
-
+import store from '@/store'
 /**
  * @param {string} path
  * @returns {Boolean}
@@ -15,7 +15,10 @@ export function isExternal(path) {
  * @returns {Boolean}
  */
 export function validUsername(str) {
-  const valid_map = ['admin', 'teacher', 'student', 'SS2201', 'SS1001', '202201001', '202201002']
+  const valid_map = store.getters.usernames
+  console.log('--------------->tokens', store.getters.tokens)
+  console.log('--------------->userinfos', store.getters.userinfos)
+  console.log('--------------->valid_map', valid_map)
   return valid_map.indexOf(str.trim()) >= 0
 }
 

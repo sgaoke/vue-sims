@@ -88,6 +88,20 @@
               />
             </el-form-item>
 
+            <el-form-item prop="usertype">
+              <span class="svg-container">
+                <svg-icon icon-class="chart" />
+              </span>
+              <el-select ref="usertype" v-model="signupForm.usertype" tabindex="4" auto-complete="on" placeholder="Usertype">
+                <el-option
+                  v-for="item in typeOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+
             <el-form-item prop="email">
               <span class="svg-container">
                 <svg-icon icon-class="email" />
@@ -98,7 +112,7 @@
                 placeholder="Email"
                 name="email"
                 type="text"
-                tabindex="4"
+                tabindex="5"
                 auto-complete="on"
               />
             </el-form-item>
@@ -114,7 +128,7 @@
                 :type="passwordType"
                 placeholder="Password"
                 name="password"
-                tabindex="5"
+                tabindex="6"
                 auto-complete="on"
                 @keyup.enter.native="handleSignup"
               />
@@ -147,6 +161,20 @@ export default {
         callback()
       }
     }
+    const validateRegUsername = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('Please enter user name'))
+      } else {
+        callback()
+      }
+    }
+    const validateUsertype = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error('Please select user type'))
+      } else {
+        callback()
+      }
+    }
     const validateEmail = (rule, value, callback) => {
       if (!validEmail(value)) {
         callback(new Error('Please enter the correct email'))
@@ -161,6 +189,7 @@ export default {
         callback()
       }
     }
+
     return {
       accountLogin: '用户登录',
       loginForm: {
@@ -169,15 +198,24 @@ export default {
       },
       signupForm: {
         username: '',
+        usertype: '',
         email: '',
         password: ''
       },
+      typeOptions: [{
+        value: 'student',
+        label: 'student'
+      }, {
+        value: 'teacher',
+        label: 'teacher'
+      }],
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       signupRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        username: [{ required: true, trigger: 'blur', validator: validateRegUsername }],
+        usertype: [{ required: true, trigger: 'blur', validator: validateUsertype }],
         email: [{ required: true, trigger: 'blur', validator: validateEmail }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
@@ -212,7 +250,24 @@ export default {
         if (valid) {
           this.loading = true
           this.$store.dispatch('user/signup', this.signupForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
+            // this.$router.push({ path: this.redirect || '/' })
+            this.signupForm = {
+              username: '',
+              usertype: '',
+              email: '',
+              password: ''
+            }
+            this.loginForm = {
+              username: '',
+              password: ''
+            }
+            this.$notify({
+              title: 'Success',
+              message: 'Register Successfully',
+              type: 'success',
+              duration: 2000
+            })
+            this.onLogin()
             this.loading = false
           }).catch(() => {
             this.loading = false
@@ -301,6 +356,30 @@ $cursor: #fff;
     color: #454545;
     box-shadow: 0 0 3px rgb(0 0 0 / 20%);
   }
+  .el-select {
+    display: inline-block;
+    height: 47px;
+    width: 85%;
+    .el-input {
+      width:100%;
+    }
+
+    input {
+      // background: transparent;
+      border: 0px;
+      -webkit-appearance: none;
+      border-radius: 15px;
+      padding: 12px 5px 12px 15px;
+      color: $light_gray;
+      height: 47px;
+      // caret-color: $cursor;
+
+      /* &:-webkit-autofill {
+        box-shadow: 0 0 0px 1000px $bg inset !important;
+        -webkit-text-fill-color: $cursor !important;
+      } */
+    }
+  }
 }
 </style>
 
@@ -356,7 +435,7 @@ $light_gray:#eee;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 22rem;
-    height: 32rem;
+    height: 33rem;
     perspective: 1500px;
     -webkit-perspective: 1500px;
     -moz-perspective: 1500px;
@@ -365,7 +444,7 @@ $light_gray:#eee;
       top: 0;
       left: 0;
       width: 22rem;
-      height: 30rem;
+      height: 33rem;
       border-radius: 10px;
       cursor: pointer;
       backface-visibility: hidden;
